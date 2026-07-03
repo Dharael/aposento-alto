@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Aposento Alto · Comunidad Cristiana</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#382417">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Aposento Alto">
+<style>
+  :root{
+    --cafe:#382417; --caramelo:#6D3C1C; --miel:#C57938; --vainilla:#E7C196;
+    --crema:#F7EEE1; --crema2:#FBF5EC; --blanco:#FFFDF9; --oro:#E0A24B;
+    --texto:#3A2A1C; --suave:#8A7358; --linea:#EAD9C2; --ok:#5B8C5A;
+    --sombra:0 8px 30px rgba(56,36,23,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--texto);background:var(--cafe);display:flex;justify-content:center;overscroll-behavior:none}
+  #app{width:100%;max-width:440px;min-height:100vh;background:radial-gradient(120% 60% at 50% -10%, #FDF4E6 0%, var(--crema) 45%, var(--crema2) 100%);position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.35)}
+  #app::before{content:"";position:fixed;inset:0;max-width:440px;margin:0 auto;pointer-events:none;z-index:0;background:radial-gradient(60% 40% at 50% 0%, rgba(224,162,75,.14), transparent 70%),repeating-conic-gradient(from 0deg at 50% -5%, rgba(224,162,75,.05) 0deg 6deg, transparent 6deg 14deg);opacity:.6}
+  .screen{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 0 96px;position:relative;z-index:1;-webkit-overflow-scrolling:touch}
+  .screen::-webkit-scrollbar{width:0}
+  .top{position:sticky;top:0;z-index:20;background:linear-gradient(180deg, rgba(247,238,225,.96), rgba(247,238,225,.82));backdrop-filter:blur(10px);padding:14px 18px 12px;border-bottom:1px solid var(--linea);display:flex;align-items:center;gap:10px}
+  .brand{display:flex;align-items:center;gap:10px;flex:1}
+  .logo{width:38px;height:38px;border-radius:12px;flex:none;background:linear-gradient(145deg,var(--miel),var(--caramelo));display:grid;place-items:center;box-shadow:0 4px 14px rgba(109,60,28,.35)}
+  .logo svg{width:22px;height:22px}
+  .brand h1{font-size:18px;font-weight:800;letter-spacing:.3px;color:var(--cafe);font-family:Georgia,'Times New Roman',serif}
+  .brand small{display:block;font-size:9.5px;color:var(--suave);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-top:-2px}
+  .icon-btn{width:40px;height:40px;border:none;border-radius:12px;background:var(--blanco);box-shadow:var(--sombra);display:grid;place-items:center;cursor:pointer;color:var(--caramelo);position:relative}
+  .icon-btn svg{width:20px;height:20px}
+  .badge{position:absolute;top:-4px;right:-4px;background:var(--miel);color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:9px;display:grid;place-items:center;padding:0 4px;border:2px solid var(--crema)}
+  .title{font-size:23px;font-weight:800;color:var(--cafe);font-family:Georgia,serif;padding:20px 18px 4px}
+  .subtitle{color:var(--suave);font-size:13.5px;padding:0 18px 14px;line-height:1.5}
+  .card{background:var(--blanco);margin:12px 16px;border-radius:20px;box-shadow:var(--sombra);border:1px solid rgba(234,217,194,.7);overflow:hidden}
+  .verse-hero{margin:16px;border-radius:24px;padding:24px 22px;color:#FBEFDD;position:relative;overflow:hidden;background:linear-gradient(150deg,var(--caramelo) 0%,var(--cafe) 100%);box-shadow:0 14px 34px rgba(56,36,23,.32)}
+  .verse-hero::after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(224,162,75,.45),transparent 70%)}
+  .verse-hero .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--vainilla);font-weight:700;position:relative}
+  .verse-hero p{font-size:18.5px;line-height:1.55;margin:12px 0 14px;font-family:Georgia,serif;position:relative}
+  .verse-hero .ref{font-weight:700;color:var(--oro);font-size:14px;position:relative}
+  .verse-actions{display:flex;gap:8px;margin-top:16px;position:relative}
+  .vbtn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);color:#FBEFDD;border-radius:12px;padding:9px 12px;font-size:12.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px}
+  .vbtn:active{transform:scale(.96)}
+  .vbtn svg{width:15px;height:15px}
+  .vbtn.on{background:var(--oro);color:var(--cafe);border-color:var(--oro)}
+  .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:6px 16px 4px}
+  .quick button{background:var(--blanco);border:1px solid var(--linea);border-radius:16px;padding:14px 4px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;box-shadow:0 4px 14px rgba(56,36,23,.06)}
+  .quick button:active{transform:translateY(2px)}
+  .qi{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,var(--vainilla),#F2D9B0);font-size:22px}
+  .quick span{font-size:11px;font-weight:700;color:var(--cafe)}
+  .sec-head{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 6px}
+  .sec-head h2{font-size:17px;color:var(--cafe);font-weight:800;font-family:Georgia,serif}
+  .sec-head a{color:var(--miel);font-size:12.5px;font-weight:700;cursor:pointer}
+  .post-top{display:flex;align-items:center;gap:11px;padding:14px 16px 10px}
+  .avatar{width:44px;height:44px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font-weight:800;font-size:16px;background:linear-gradient(145deg,var(--miel),var(--caramelo));box-shadow:0 3px 10px rgba(109,60,28,.3)}
+  .post-top .who{flex:1;min-width:0}
+  .post-top .who b{font-size:14.5px;color:var(--cafe);display:flex;align-items:center;gap:5px}
+  .post-top .who small{font-size:11.5px;color:var(--suave)}
+  .verified{width:15px;height:15px;color:var(--miel)}
+  .follow-btn{border:1.5px solid var(--miel);color:var(--miel);background:transparent;font-weight:700;font-size:12px;padding:6px 13px;border-radius:20px;cursor:pointer}
+  .follow-btn.on{background:var(--miel);color:#fff}
+  .mine-tag{border:1.5px solid var(--linea);color:var(--suave);background:var(--crema2);font-weight:700;font-size:11px;padding:6px 11px;border-radius:20px}
+  .post-body{padding:2px 16px 12px;font-size:14.5px;line-height:1.6;color:var(--texto);white-space:pre-wrap;word-break:break-word}
+  .post-verse{margin:4px 16px 12px;padding:14px 16px;background:linear-gradient(135deg,#FBF1E1,#F6E7CF);border-radius:14px;border-left:4px solid var(--miel);font-family:Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--caramelo)}
+  .post-verse b{display:block;margin-top:8px;font-size:12.5px;color:var(--miel);font-family:'Segoe UI',sans-serif}
+  .event{margin:0 16px 12px;border:1px solid var(--linea);border-radius:16px;overflow:hidden}
+  .event-band{background:linear-gradient(135deg,var(--caramelo),var(--cafe));color:#FBEFDD;padding:12px 16px;display:flex;align-items:center;gap:12px}
+  .event-date{background:rgba(255,255,255,.15);border-radius:12px;padding:6px 10px;text-align:center;line-height:1.1;flex:none;min-width:48px}
+  .event-date b{display:block;font-size:19px}
+  .event-date span{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--vainilla)}
+  .event-band .ev-info b{font-size:14.5px}
+  .event-band .ev-info small{color:var(--vainilla);font-size:12px}
+  .event-foot{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:var(--crema2)}
+  .going{font-size:12px;color:var(--suave);display:flex;align-items:center;gap:6px}
+  .going .dots{display:flex}
+  .going .dots i{width:22px;height:22px;border-radius:50%;background:var(--vainilla);border:2px solid var(--blanco);margin-left:-8px;display:grid;place-items:center;font-size:10px;font-style:normal;color:var(--caramelo);font-weight:700}
+  .assist{background:var(--miel);color:#fff;border:none;font-weight:700;font-size:12.5px;padding:9px 16px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:6px}
+  .assist.on{background:var(--ok)}
+  .assist svg{width:15px;height:15px}
+  .reacts{display:flex;gap:7px;padding:10px 14px;border-top:1px solid var(--linea);flex-wrap:wrap}
+  .react{border:1px solid var(--linea);background:var(--crema2);border-radius:20px;padding:7px 12px;font-size:12.5px;font-weight:700;color:var(--caramelo);cursor:pointer;display:flex;align-items:center;gap:5px;transition:.15s}
+  .react .em{font-size:15px}
+  .react.on{background:linear-gradient(135deg,var(--vainilla),#F2D9B0);border-color:var(--miel);color:var(--cafe);transform:scale(1.04)}
+  .react:active{transform:scale(.94)}
+  .react .n{font-size:11px;color:var(--suave)}
+  .emos{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:8px 16px}
+  .emo{border:none;border-radius:18px;padding:18px 16px;text-align:left;cursor:pointer;color:#fff;position:relative;overflow:hidden;box-shadow:var(--sombra);min-height:96px;display:flex;flex-direction:column;justify-content:space-between}
+  .emo .em{font-size:26px}
+  .emo b{font-size:15px;font-weight:800}
+  .emo small{font-size:11px;opacity:.85;display:block;margin-top:2px}
+  .emo:active{transform:scale(.97)}
+  .story{display:flex;gap:14px;align-items:center;padding:14px 16px;cursor:pointer}
+  .story:not(:last-child){border-bottom:1px solid var(--linea)}
+  .story-ic{width:52px;height:52px;border-radius:16px;flex:none;display:grid;place-items:center;font-size:24px;background:linear-gradient(145deg,var(--vainilla),#F2D9B0)}
+  .story .st{flex:1}
+  .story .st b{font-size:15px;color:var(--cafe);display:block}
+  .story .st small{font-size:12px;color:var(--suave)}
+  .chev{color:var(--miel);width:20px;height:20px;flex:none}
+  .pray-card{margin:12px 16px;background:linear-gradient(155deg,#FBF3E6,#F5E6CE);border-radius:20px;padding:20px;border:1px solid var(--linea);box-shadow:var(--sombra)}
+  .pray-card .lbl{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--miel);font-weight:800;display:flex;align-items:center;gap:6px}
+  .pray-text{font-family:Georgia,serif;font-size:16px;line-height:1.7;color:var(--caramelo);margin:14px 0 6px;min-height:120px}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:4px 16px 8px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{height:0}
+  .pchip{white-space:nowrap;border:1px solid var(--linea);background:var(--blanco);color:var(--caramelo);font-weight:700;font-size:12.5px;padding:8px 14px;border-radius:20px;cursor:pointer}
+  .pchip.on{background:var(--miel);color:#fff;border-color:var(--miel)}
+  .gen-btn{width:calc(100% - 32px);margin:6px 16px 4px;background:linear-gradient(135deg,var(--miel),var(--caramelo));color:#fff;border:none;padding:15px;border-radius:16px;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 8px 20px rgba(109,60,28,.3);display:flex;align-items:center;justify-content:center;gap:8px}
+  .gen-btn:active{transform:scale(.98)}
+  .room{display:flex;align-items:center;gap:13px;padding:15px 16px;cursor:pointer}
+  .room:not(:last-child){border-bottom:1px solid var(--linea)}
+  .live{width:10px;height:10px;border-radius:50%;background:#D64545;flex:none;animation:pulse 1.6s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(214,69,69,.5)}70%{box-shadow:0 0 0 10px rgba(214,69,69,0)}100%{box-shadow:0 0 0 0 rgba(214,69,69,0)}}
+  .room .ri{flex:1}
+  .room .ri b{font-size:14.5px;color:var(--cafe);display:block}
+  .room .ri small{font-size:12px;color:var(--suave)}
+  .room .listeners{font-size:12px;color:var(--miel);font-weight:700;display:flex;align-items:center;gap:4px}
+  .join{background:var(--caramelo);color:#fff;border:none;font-weight:700;font-size:12.5px;padding:9px 15px;border-radius:20px;cursor:pointer;margin-left:8px}
+  .prof-hero{margin:16px;border-radius:24px;padding:26px 20px;text-align:center;color:#FBEFDD;position:relative;overflow:hidden;background:linear-gradient(150deg,var(--caramelo),var(--cafe));box-shadow:var(--sombra)}
+  .prof-hero .pav{width:82px;height:82px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font-size:32px;font-weight:800;color:#fff;background:linear-gradient(145deg,var(--miel),var(--oro));border:3px solid rgba(255,255,255,.3)}
+  .prof-hero h3{font-size:20px;font-family:Georgia,serif}
+  .prof-hero .church{color:var(--vainilla);font-size:13px;margin-top:4px}
+  .prof-stats{display:flex;justify-content:center;gap:26px;margin-top:16px}
+  .prof-stats div{text-align:center}
+  .prof-stats b{font-size:19px;display:block}
+  .prof-stats small{font-size:11px;color:var(--vainilla)}
+  .edit-mini{margin-top:14px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);color:#FBEFDD;font-weight:700;font-size:12.5px;padding:8px 16px;border-radius:20px;cursor:pointer}
+  .list-row{display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer}
+  .list-row:not(:last-child){border-bottom:1px solid var(--linea)}
+  .list-row .lr-ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--crema2);color:var(--caramelo)}
+  .list-row .lr-ic svg{width:19px;height:19px}
+  .list-row span{flex:1;font-size:14.5px;font-weight:600;color:var(--cafe)}
+  .list-row .cnt{font-size:12.5px;color:var(--suave);font-weight:700;background:var(--crema2);padding:2px 9px;border-radius:10px}
+  .nav{position:absolute;bottom:0;left:0;right:0;z-index:30;background:linear-gradient(180deg,rgba(251,245,236,.85),rgba(251,245,236,.98));backdrop-filter:blur(14px);border-top:1px solid var(--linea);display:flex;padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+  .nav button{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--suave);position:relative}
+  .nav button svg{width:23px;height:23px}
+  .nav button span{font-size:10px;font-weight:700}
+  .nav button.on{color:var(--caramelo)}
+  .nav button.on::before{content:"";position:absolute;top:-8px;width:26px;height:3px;border-radius:3px;background:var(--miel)}
+  .fab{position:absolute;right:18px;bottom:86px;z-index:29;width:56px;height:56px;border-radius:50%;background:linear-gradient(145deg,var(--miel),var(--caramelo));border:none;color:#fff;box-shadow:0 10px 24px rgba(109,60,28,.45);cursor:pointer;display:grid;place-items:center}
+  .fab svg{width:26px;height:26px}
+  .fab:active{transform:scale(.92)}
+  .sheet{position:fixed;inset:0;max-width:440px;margin:0 auto;z-index:100;display:none}
+  .sheet.open{display:block}
+  .sheet-bg{position:absolute;inset:0;background:rgba(56,36,23,.55);backdrop-filter:blur(2px)}
+  .sheet-body{position:absolute;left:0;right:0;bottom:0;max-height:94%;background:var(--crema);border-radius:26px 26px 0 0;overflow-y:auto;padding:8px 0 30px;animation:up .3s ease}
+  @keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .grabber{width:44px;height:5px;background:var(--linea);border-radius:3px;margin:8px auto 4px}
+  .sheet-head{padding:10px 22px 6px;display:flex;align-items:center;justify-content:space-between}
+  .sheet-head h2{font-size:21px;font-family:Georgia,serif;color:var(--cafe)}
+  .sheet-head button{background:var(--blanco);border:none;width:34px;height:34px;border-radius:50%;font-size:18px;color:var(--caramelo);cursor:pointer;box-shadow:var(--sombra)}
+  .reader{padding:6px 24px;font-size:16.5px;line-height:1.85;color:var(--texto);font-family:Georgia,serif}
+  .reader p{margin-bottom:14px}
+  .verse-list{padding:6px 20px}
+  .verse-item{background:var(--blanco);border-radius:16px;padding:16px 18px;margin-bottom:12px;box-shadow:var(--sombra);border-left:4px solid var(--miel);position:relative}
+  .verse-item p{font-family:Georgia,serif;font-size:15.5px;line-height:1.6;color:var(--texto)}
+  .verse-item b{color:var(--miel);font-size:12.5px;display:block;margin-top:8px}
+  .vi-save{position:absolute;top:12px;right:12px;background:var(--crema2);border:1px solid var(--linea);border-radius:10px;width:32px;height:32px;cursor:pointer;color:var(--miel);display:grid;place-items:center}
+  .vi-save svg{width:16px;height:16px}
+  .vi-save.on{background:var(--miel);color:#fff}
+  /* Formularios */
+  .field{padding:6px 22px}
+  .field label{display:block;font-size:12.5px;font-weight:700;color:var(--caramelo);margin-bottom:6px}
+  .field input,.field textarea,.field select{width:100%;border:1px solid var(--linea);background:var(--blanco);border-radius:14px;padding:13px 14px;font-size:14.5px;color:var(--texto);font-family:inherit;outline:none}
+  .field textarea{min-height:90px;resize:vertical;line-height:1.5}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--miel)}
+  .type-tabs{display:flex;gap:8px;padding:8px 22px 4px}
+  .type-tabs button{flex:1;border:1px solid var(--linea);background:var(--blanco);color:var(--caramelo);font-weight:700;font-size:12.5px;padding:10px 4px;border-radius:14px;cursor:pointer}
+  .type-tabs button.on{background:linear-gradient(135deg,var(--miel),var(--caramelo));color:#fff;border-color:transparent}
+  .primary-btn{width:calc(100% - 44px);margin:14px 22px 4px;background:linear-gradient(135deg,var(--miel),var(--caramelo));color:#fff;border:none;padding:15px;border-radius:16px;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 8px 20px rgba(109,60,28,.3)}
+  .primary-btn:active{transform:scale(.98)}
+  .primary-btn.ghost{background:var(--blanco);color:var(--caramelo);border:1px solid var(--linea);box-shadow:none}
+  .empty{text-align:center;color:var(--suave);font-size:13.5px;padding:40px 30px;line-height:1.6}
+  .empty .big{font-size:40px;display:block;margin-bottom:10px}
+  .composer{margin:10px 16px 0;background:var(--blanco);border-radius:18px;box-shadow:var(--sombra);border:1px solid var(--linea);padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer}
+  .composer .avatar{width:40px;height:40px;font-size:15px}
+  .composer .ph{flex:1;color:var(--suave);font-size:14px}
+  .composer .plus{color:var(--miel)}
+  .devo{margin:12px 16px;background:var(--blanco);border-radius:20px;box-shadow:var(--sombra);border:1px solid var(--linea);overflow:hidden}
+  .devo .dtop{padding:16px 18px 8px}
+  .devo .dtop .lbl{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--miel);font-weight:800}
+  .devo .dtop h3{font-size:17px;color:var(--cafe);font-family:Georgia,serif;margin-top:4px}
+  .devo p{padding:0 18px 16px;font-size:14.5px;line-height:1.65;color:var(--texto)}
+  .toast{position:fixed;bottom:120px;left:50%;transform:translateX(-50%);max-width:380px;background:var(--cafe);color:#FBEFDD;padding:13px 20px;border-radius:14px;font-size:13.5px;font-weight:600;z-index:200;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transition:.3s;pointer-events:none;text-align:center}
+  .toast.show{opacity:1}
+  .fade{animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .del{color:#B24A3A;font-size:12px;font-weight:700;cursor:pointer;margin-top:10px;display:inline-block}
+  /* ---- Modo oscuro ---- */
+  body.dark{ --cafe:#F3E8D8; --caramelo:#E0A24B; --crema:#221710; --crema2:#2A1D14; --blanco:#31241A; --texto:#EFE2D1; --suave:#B6997C; --linea:#463322; }
+  body.dark #app{ background:radial-gradient(120% 60% at 50% -10%, #2C1D11 0%, #221710 45%, #1B120B 100%); }
+  body.dark #app::before{ opacity:.28; }
+  body.dark .top{ background:linear-gradient(180deg,rgba(34,23,16,.96),rgba(34,23,16,.8)); }
+  body.dark .nav{ background:linear-gradient(180deg,rgba(34,23,16,.85),rgba(42,29,20,.98)); }
+  body.dark .verse-hero, body.dark .prof-hero, body.dark .event-band{ background:linear-gradient(150deg,#3A2417,#160D07); }
+  body.dark .pray-card{ background:linear-gradient(155deg,#2F2116,#241A11); }
+  body.dark .pray-text{ color:var(--vainilla); }
+  body.dark .post-verse{ background:linear-gradient(135deg,#2F2116,#241A11); color:var(--vainilla); }
+  body.dark .toast{ background:#141009; color:#F3E8D8; }
+  body.dark .story-ic, body.dark .qi, body.dark .lr-ic{ filter:brightness(.92); }
+  .switch{width:46px;height:26px;border-radius:20px;background:var(--linea);position:relative;transition:.2s;flex:none;cursor:pointer}
+  .switch.on{background:var(--miel)}
+  .switch i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+  .switch.on i{left:23px}
+  .roombar{position:absolute;left:10px;right:10px;bottom:72px;z-index:28;background:linear-gradient(135deg,var(--caramelo),var(--cafe));color:#FBEFDD;border-radius:16px;padding:9px 12px;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(56,36,23,.4)}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top">
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2c-1 3-4 5-4 9a4 4 0 108 0c0-4-3-6-4-9z" fill="#FBEFDD"/><circle cx="12" cy="11.5" r="1.6" fill="#C57938"/></svg></div>
+      <div><h1>Aposento Alto</h1><small>Comunidad Cristiana</small></div>
+    </div>
+    <button class="icon-btn" id="btn-inbox" onclick="openInbox()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M4 5h16v14H4z"/><path d="M4 6l8 6 8-6"/></svg><span class="badge" id="badge-inbox" style="display:none">0</span></button>
+    <button class="icon-btn" id="btn-notifs" onclick="openNotifs()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8a6 6 0 10-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg><span class="badge" id="badge-notifs" style="display:none">0</span></button>
+  </div>
+  <div class="screen" id="screen"></div>
+  <button class="fab" id="fab" onclick="openComposer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+  <div class="nav" id="nav"></div>
+</div>
+
+<div class="sheet" id="sheet">
+  <div class="sheet-bg" onclick="closeSheet()"></div>
+  <div class="sheet-body">
+    <div class="grabber"></div>
+    <div class="sheet-head"><h2 id="sheet-title">Título</h2><button onclick="closeSheet()">×</button></div>
+    <div id="sheet-content"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ PERSISTENCIA ============ */
+const KEY='aposentoAlto_v1';
+function load(){ try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}} }
+function persist(){ localStorage.setItem(KEY, JSON.stringify(store)); }
+let store = load();
+store.going = store.going || {};                 // RSVP a cultos (local)
+store.savedVerses = store.savedVerses || [];     // guardados personales (local)
+store.savedPrayers = store.savedPrayers || [];
+store.savedStories = store.savedStories || [];
+
+/* ---- Cuenta y conexión con el servidor ---- */
+const auth = { token: localStorage.getItem('aa_token') || '', user: null };
+function setToken(t){ auth.token = t; if(t) localStorage.setItem('aa_token', t); else localStorage.removeItem('aa_token'); }
+async function API(p, m, b){
+  let r;
+  try{
+    r = await fetch('/api/'+p, { method:m||'GET', headers:{'Content-Type':'application/json','x-token':auth.token||''}, body: b?JSON.stringify(b):undefined });
+  }catch(e){
+    throw new Error('No hay conexión con el servidor. Abre la app con INICIAR_APOSENTO_ALTO.bat (no con doble clic al archivo).');
+  }
+  const j = await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(j.error || ('Error '+r.status));
+  return j;
+}
+let feed = [];        // publicaciones del servidor
+let feedPoll = null;  // temporizador de refresco
+
+/* ============ DATOS ============ */
+const dailyVerses = [
+  {text:"Jehová es mi pastor; nada me faltará. En lugares de delicados pastos me hará descansar; junto a aguas de reposo me pastoreará.", ref:"Salmo 23:1-2"},
+  {text:"Todo lo puedo en Cristo que me fortalece.", ref:"Filipenses 4:13"},
+  {text:"Porque yo sé los pensamientos que tengo acerca de vosotros, pensamientos de paz, y no de mal, para daros el fin que esperáis.", ref:"Jeremías 29:11"},
+  {text:"Fíate de Jehová de todo tu corazón, y no te apoyes en tu propia prudencia.", ref:"Proverbios 3:5"},
+  {text:"No temas, porque yo estoy contigo; no desmayes, porque yo soy tu Dios que te esfuerzo.", ref:"Isaías 41:10"},
+  {text:"Esperé yo a Jehová, y se inclinó a mí, y oyó mi clamor.", ref:"Salmo 40:1"},
+  {text:"Bendice, alma mía, a Jehová, y no olvides ninguno de sus beneficios.", ref:"Salmo 103:2"},
+  {text:"El que habita al abrigo del Altísimo morará bajo la sombra del Omnipotente.", ref:"Salmo 91:1"},
+  {text:"Mas buscad primeramente el reino de Dios y su justicia, y todas estas cosas os serán añadidas.", ref:"Mateo 6:33"},
+  {text:"Los que esperan a Jehová tendrán nuevas fuerzas; levantarán alas como las águilas.", ref:"Isaías 40:31"}
+];
+const devotionals = [
+  {title:"Descansa en su presencia", body:"Hay días en que corremos sin parar y olvidamos que Dios no nos pide correr, sino confiar. Hoy Él te invita a soltar la carga. No tienes que resolverlo todo con tus fuerzas; el mismo Dios que sostiene el universo sostiene tu vida. Respira, ora, y deja que su paz te alcance. No estás solo, y nunca lo estarás."},
+  {title:"Su misericordia es nueva cada mañana", body:"No importa cómo terminó ayer. Hoy Dios te regala un comienzo limpio. Sus misericordias son nuevas cada mañana; grande es su fidelidad. Levanta la mirada: lo que viene está lleno de su gracia. Camina este día sabiendo que eres amado más de lo que imaginas."},
+  {title:"Dios pelea por ti", body:"Cuando el problema parece más grande que tú, recuerda que no estás peleando solo. Como con David frente a Goliat, la batalla es de Jehová. Tu parte es confiar y dar el paso; la victoria es suya. Descansa: el que está contigo es mayor que el que está contra ti."},
+  {title:"Habla con Él como con un amigo", body:"La oración no necesita palabras perfectas. Dios quiere tu corazón sincero, tal como estás. Cuéntale tus miedos, tus alegrías, tus dudas. Él escucha con amor de Padre. Hoy, dedícale un momento a solas y verás cómo la paz llega sin apuro."},
+  {title:"Siembra amor hoy", body:"Un gesto amable puede ser la respuesta a la oración de otra persona. Amar al prójimo es la forma más clara de mostrar a Cristo. Una llamada, una palabra de aliento, una sonrisa: siembra bondad hoy y estarás reflejando el corazón de Dios."}
+];
+const reactionsDef = [
+  {id:'victoria', em:'🙌', name:'En victoria'},
+  {id:'viva', em:'👑', name:'Viva Cristo'},
+  {id:'uncion', em:'🔥', name:'Unción'},
+  {id:'amen', em:'🕊️', name:'Amén'}
+];
+const seedPosts = [
+  {id:'s1', name:'Pastor Elías Reyes', church:'Iglesia Pentecostal Monte Sion · Santo Domingo', ver:true, time:'hace 2 h', avatar:'E',
+   body:'¡Bendiciones familia! Este domingo tendremos un culto especial de sanidad y liberación. Ven tal como estás. 🙏',
+   event:{day:'12', month:'JUL', title:'Culto de Sanidad', sub:'Domingo · 10:00 AM · Monte Sion', going:34},
+   reacts:{victoria:128, viva:96, uncion:210, amen:74}},
+  {id:'s2', name:'Hna. Gabriela Mota', church:'Congregación Aposento Alto · Santiago', ver:false, time:'hace 5 h', avatar:'G',
+   verse:{text:'Todo lo puedo en Cristo que me fortalece.', ref:'Filipenses 4:13'},
+   body:'Comparto este versículo que me sostuvo esta semana. Que a alguien más le dé fuerzas hoy. ✨',
+   reacts:{victoria:56, viva:41, uncion:88, amen:120}},
+  {id:'s3', name:'Campaña Fuego del Espíritu', church:'Evento Regional · Rep. Dominicana', ver:true, time:'hace 1 d', avatar:'F',
+   body:'Gran campaña evangelística al aire libre. 3 noches de adoración, palabra y milagros. ¡Trae a tu familia! Entrada libre.',
+   event:{day:'25', month:'JUL', title:'Campaña Fuego del Espíritu', sub:'Vie a Dom · 7:00 PM · Parque Central', going:212},
+   reacts:{victoria:340, viva:280, uncion:512, amen:190}}
+];
+const emotions = [
+  {id:'triste', em:'🌧️', name:'Triste', sub:'Consuelo para el alma', color:'linear-gradient(145deg,#6D3C1C,#382417)'},
+  {id:'ansioso', em:'🌿', name:'Ansioso', sub:'Encuentra paz', color:'linear-gradient(145deg,#C57938,#6D3C1C)'},
+  {id:'miedo', em:'🛡️', name:'Con miedo', sub:'Dios te fortalece', color:'linear-gradient(145deg,#8A5A2B,#4A2E17)'},
+  {id:'confundido', em:'🧭', name:'Confundido', sub:'Busca dirección', color:'linear-gradient(145deg,#A9662E,#5C3417)'},
+  {id:'solo', em:'🤍', name:'Solo', sub:'Nunca estás solo', color:'linear-gradient(145deg,#B0743A,#6D3C1C)'},
+  {id:'cansado', em:'🌙', name:'Cansado', sub:'Descanso para ti', color:'linear-gradient(145deg,#7A5230,#3E2817)'},
+  {id:'desanimado', em:'🕯️', name:'Desanimado', sub:'No te rindas', color:'linear-gradient(145deg,#9A5E2C,#5C3417)'},
+  {id:'tentado', em:'⚓', name:'Tentado', sub:'Dios te sostiene', color:'linear-gradient(145deg,#8A5A2B,#4A2E17)'},
+  {id:'enfermo', em:'🌿', name:'Enfermo', sub:'El Señor te sana', color:'linear-gradient(145deg,#B0743A,#6D3C1C)'},
+  {id:'culpa', em:'🕊️', name:'Con culpa', sub:'Hay perdón', color:'linear-gradient(145deg,#A9662E,#5C3417)'},
+  {id:'gozo', em:'☀️', name:'Con gozo', sub:'Celebra su bondad', color:'linear-gradient(145deg,#E0A24B,#C57938)'},
+  {id:'paz', em:'🕊️', name:'En paz', sub:'Reposa en Él', color:'linear-gradient(145deg,#C9924E,#8A5A2B)'},
+  {id:'esperanza', em:'🌅', name:'Con esperanza', sub:'Lo mejor viene', color:'linear-gradient(145deg,#E0A24B,#B0743A)'},
+  {id:'gratitud', em:'🙏', name:'Agradecido', sub:'Da gracias', color:'linear-gradient(145deg,#D49A56,#6D3C1C)'}
+];
+const emotionVerses = {
+  triste:[{t:'Cercano está Jehová a los quebrantados de corazón; y salva a los contritos de espíritu.', r:'Salmo 34:18'},{t:'Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar.', r:'Mateo 11:28'},{t:'Enjugará Dios toda lágrima de los ojos de ellos; y ya no habrá muerte, ni llanto, ni clamor, ni dolor.', r:'Apocalipsis 21:4'},{t:'Bienaventurados los que lloran, porque ellos recibirán consolación.', r:'Mateo 5:4'},{t:'El está sanando a los quebrantados de corazón, y vendando sus heridas.', r:'Salmo 147:3'},{t:'Por la noche durará el lloro, y a la mañana vendrá la alegría.', r:'Salmo 30:5'},{t:'Echa sobre Jehová tu carga, y él te sustentará; no dejará para siempre caído al justo.', r:'Salmo 55:22'},{t:'Como aquel a quien consuela su madre, así os consolaré yo a vosotros.', r:'Isaías 66:13'},{t:'El Dios de toda consolación, el cual nos consuela en todas nuestras tribulaciones.', r:'2 Corintios 1:3-4'},{t:'No te desalientes ante los males; que Jehová enjugará las lágrimas de todos los rostros.', r:'Isaías 25:8'}],
+  ansioso:[{t:'Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias.', r:'Filipenses 4:6'},{t:'Echando toda vuestra ansiedad sobre él, porque él tiene cuidado de vosotros.', r:'1 Pedro 5:7'},{t:'La paz os dejo, mi paz os doy; no como el mundo la da, yo os la doy.', r:'Juan 14:27'},{t:'No os afanéis por el día de mañana, porque el día de mañana traerá su afán.', r:'Mateo 6:34'},{t:'En el día que temo, yo en ti confío.', r:'Salmo 56:3'},{t:'Cuando mis inquietudes se multiplican dentro de mí, tus consolaciones alegran mi alma.', r:'Salmo 94:19'},{t:'Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar.', r:'Mateo 11:28'},{t:'La ansiedad en el corazón del hombre lo deprime, mas la buena palabra lo alegra.', r:'Proverbios 12:25'},{t:'Buscad primeramente el reino de Dios y su justicia, y todas estas cosas os serán añadidas.', r:'Mateo 6:33'},{t:'Jehová peleará por vosotros, y vosotros estaréis tranquilos.', r:'Éxodo 14:14'}],
+  miedo:[{t:'No temas, porque yo estoy contigo; no desmayes, porque yo soy tu Dios que te esfuerzo.', r:'Isaías 41:10'},{t:'Porque no nos ha dado Dios espíritu de cobardía, sino de poder, de amor y de dominio propio.', r:'2 Timoteo 1:7'},{t:'Esfuérzate y sé valiente; no temas ni desmayes, porque Jehová tu Dios estará contigo dondequiera que vayas.', r:'Josué 1:9'},{t:'Jehová es mi luz y mi salvación; ¿de quién temeré?', r:'Salmo 27:1'},{t:'Aunque ande en valle de sombra de muerte, no temeré mal alguno, porque tú estarás conmigo.', r:'Salmo 23:4'},{t:'El ángel de Jehová acampa alrededor de los que le temen, y los defiende.', r:'Salmo 34:7'},{t:'En Dios he confiado; no temeré; ¿qué puede hacerme el hombre?', r:'Salmo 56:11'},{t:'No temáis; estad firmes, y ved la salvación que Jehová hará hoy con vosotros.', r:'Éxodo 14:13'},{t:'Cuando pases por las aguas, yo estaré contigo; y si por los ríos, no te anegarán.', r:'Isaías 43:2'},{t:'Si Dios es por nosotros, ¿quién contra nosotros?', r:'Romanos 8:31'}],
+  confundido:[{t:'Fíate de Jehová de todo tu corazón, y no te apoyes en tu propia prudencia. Reconócelo en todos tus caminos, y él enderezará tus veredas.', r:'Proverbios 3:5-6'},{t:'Y si alguno de vosotros tiene falta de sabiduría, pídala a Dios, el cual da a todos abundantemente.', r:'Santiago 1:5'},{t:'Lámpara es a mis pies tu palabra, y lumbrera a mi camino.', r:'Salmo 119:105'},{t:'Te haré entender, y te enseñaré el camino en que debes andar; sobre ti fijaré mis ojos.', r:'Salmo 32:8'},{t:'Clama a mí, y yo te responderé, y te enseñaré cosas grandes y ocultas que tú no conoces.', r:'Jeremías 33:3'},{t:'Tus oídos oirán a tus espaldas palabra que diga: Este es el camino, andad por él.', r:'Isaías 30:21'},{t:'Porque Dios no es Dios de confusión, sino de paz.', r:'1 Corintios 14:33'},{t:'Encomienda a Jehová tu camino, y confía en él; y él hará.', r:'Salmo 37:5'},{t:'Jehová enderezará todos tus pasos.', r:'Proverbios 16:9'}],
+  solo:[{t:'No te desampararé, ni te dejaré.', r:'Hebreos 13:5'},{t:'Esfuérzate y sé valiente... él es quien va contigo; no te dejará, ni te desamparará.', r:'Deuteronomio 31:6'},{t:'He aquí yo estoy con vosotros todos los días, hasta el fin del mundo.', r:'Mateo 28:20'},{t:'Aunque mi padre y mi madre me dejaran, con todo, Jehová me recogerá.', r:'Salmo 27:10'},{t:'Padre de huérfanos y defensor de viudas es Dios en su santa morada.', r:'Salmo 68:5'},{t:'No os dejaré huérfanos; vendré a vosotros.', r:'Juan 14:18'},{t:'Yo estoy contigo, y te guardaré por dondequiera que fueres.', r:'Génesis 28:15'},{t:'Cercano está Jehová a todos los que le invocan de veras.', r:'Salmo 145:18'},{t:'Yo Jehová tu Dios, quien te sostiene de tu mano derecha, y te dice: No temas, yo te ayudo.', r:'Isaías 41:13'}],
+  cansado:[{t:'Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar.', r:'Mateo 11:28'},{t:'Los que esperan a Jehová tendrán nuevas fuerzas; correrán, y no se cansarán.', r:'Isaías 40:31'},{t:'El da esfuerzo al cansado, y multiplica las fuerzas al que no tiene ningunas.', r:'Isaías 40:29'},{t:'En paz me acostaré, y asimismo dormiré; porque solo tú, Jehová, me haces vivir confiado.', r:'Salmo 4:8'},{t:'Mi carne y mi corazón desfallecen; mas la roca de mi corazón y mi porción es Dios.', r:'Salmo 73:26'},{t:'No nos cansemos, pues, de hacer bien; porque a su tiempo segaremos, si no desmayamos.', r:'Gálatas 6:9'},{t:'Bástate mi gracia; porque mi poder se perfecciona en la debilidad.', r:'2 Corintios 12:9'},{t:'A los ojos de los que le temen, él da comida; se acordará para siempre de su pacto.', r:'Salmo 111:5'}],
+  desanimado:[{t:'¿Por qué te abates, oh alma mía? Espera en Dios; porque aún he de alabarle.', r:'Salmo 42:11'},{t:'No temas, porque yo estoy contigo; te sustentaré con la diestra de mi justicia.', r:'Isaías 41:10'},{t:'El que comenzó en vosotros la buena obra, la perfeccionará hasta el día de Jesucristo.', r:'Filipenses 1:6'},{t:'Estamos atribulados en todo, mas no angustiados; en apuros, mas no desesperados.', r:'2 Corintios 4:8'},{t:'Esperé yo a Jehová, y se inclinó a mí, y oyó mi clamor.', r:'Salmo 40:1'},{t:'Los que sembraron con lágrimas, con regocijo segarán.', r:'Salmo 126:5'},{t:'Todo lo puedo en Cristo que me fortalece.', r:'Filipenses 4:13'},{t:'Levántate, resplandece; porque ha venido tu luz, y la gloria de Jehová ha nacido sobre ti.', r:'Isaías 60:1'},{t:'El justo cae siete veces, y vuelve a levantarse.', r:'Proverbios 24:16'}],
+  tentado:[{t:'No os ha sobrevenido ninguna tentación que no sea humana; pero Dios os dará también junto con la tentación la salida.', r:'1 Corintios 10:13'},{t:'Someteos, pues, a Dios; resistid al diablo, y huirá de vosotros.', r:'Santiago 4:7'},{t:'Velad y orad, para que no entréis en tentación; el espíritu está dispuesto, mas la carne es débil.', r:'Mateo 26:41'},{t:'En mi corazón he guardado tus dichos, para no pecar contra ti.', r:'Salmo 119:11'},{t:'Bienaventurado el varón que soporta la tentación; porque recibirá la corona de vida.', r:'Santiago 1:12'},{t:'Porque en cuanto él mismo padeció siendo tentado, es poderoso para socorrer a los que son tentados.', r:'Hebreos 2:18'},{t:'Mayor es el que está en vosotros, que el que está en el mundo.', r:'1 Juan 4:4'},{t:'Vestíos de toda la armadura de Dios, para que podáis estar firmes contra las asechanzas del diablo.', r:'Efesios 6:11'}],
+  enfermo:[{t:'Él es quien perdona todas tus iniquidades, el que sana todas tus dolencias.', r:'Salmo 103:3'},{t:'Por su llaga fuimos nosotros curados.', r:'Isaías 53:5'},{t:'Sáname, oh Jehová, y seré sano; sálvame, y seré salvo.', r:'Jeremías 17:14'},{t:'La oración de fe salvará al enfermo, y el Señor lo levantará.', r:'Santiago 5:15'},{t:'Yo Jehová soy tu sanador.', r:'Éxodo 15:26'},{t:'Amado, yo deseo que tú seas prosperado en todas las cosas, y que tengas salud.', r:'3 Juan 1:2'},{t:'Jehová lo sustentará sobre el lecho del dolor; mullirás toda su cama en su enfermedad.', r:'Salmo 41:3'},{t:'Y sanaba Jesús toda enfermedad y toda dolencia en el pueblo.', r:'Mateo 4:23'}],
+  culpa:[{t:'Si confesamos nuestros pecados, él es fiel y justo para perdonar nuestros pecados, y limpiarnos de toda maldad.', r:'1 Juan 1:9'},{t:'Cuanto está lejos el oriente del occidente, hizo alejar de nosotros nuestras rebeliones.', r:'Salmo 103:12'},{t:'Ninguna condenación hay para los que están en Cristo Jesús.', r:'Romanos 8:1'},{t:'Aunque vuestros pecados sean como la grana, como la nieve serán emblanquecidos.', r:'Isaías 1:18'},{t:'Crea en mí, oh Dios, un corazón limpio, y renueva un espíritu recto dentro de mí.', r:'Salmo 51:10'},{t:'Yo, yo soy el que borro tus rebeliones por amor de mí mismo, y no me acordaré de tus pecados.', r:'Isaías 43:25'},{t:'Venid luego, dice Jehová, y estemos a cuenta... y os limpiaré.', r:'Isaías 1:18'},{t:'Bienaventurado aquel cuya transgresión ha sido perdonada, y cubierto su pecado.', r:'Salmo 32:1'}],
+  gozo:[{t:'El gozo de Jehová es vuestra fuerza.', r:'Nehemías 8:10'},{t:'Me mostrarás la senda de la vida; en tu presencia hay plenitud de gozo.', r:'Salmo 16:11'},{t:'Este es el día que hizo Jehová; nos gozaremos y alegraremos en él.', r:'Salmo 118:24'},{t:'Estad siempre gozosos.', r:'1 Tesalonicenses 5:16'},{t:'Regocijaos en el Señor siempre. Otra vez digo: ¡Regocijaos!', r:'Filipenses 4:4'},{t:'Estas cosas os he hablado, para que mi gozo esté en vosotros, y vuestro gozo sea cumplido.', r:'Juan 15:11'},{t:'El corazón alegre constituye buen remedio.', r:'Proverbios 17:22'},{t:'A quien amáis sin haberle visto... os alegráis con gozo inefable y glorioso.', r:'1 Pedro 1:8'},{t:'Servid a Jehová con alegría; venid ante su presencia con regocijo.', r:'Salmo 100:2'}],
+  paz:[{t:'Tú guardarás en completa paz a aquel cuyo pensamiento en ti persevera; porque en ti ha confiado.', r:'Isaías 26:3'},{t:'La paz os dejo, mi paz os doy... No se turbe vuestro corazón, ni tenga miedo.', r:'Juan 14:27'},{t:'En paz me acostaré, y asimismo dormiré; porque solo tú, Jehová, me haces vivir confiado.', r:'Salmo 4:8'},{t:'Y la paz de Dios, que sobrepasa todo entendimiento, guardará vuestros corazones.', r:'Filipenses 4:7'},{t:'Justificados, pues, por la fe, tenemos paz para con Dios por medio de nuestro Señor Jesucristo.', r:'Romanos 5:1'},{t:'Estas cosas os he hablado para que en mí tengáis paz.', r:'Juan 16:33'},{t:'Bienaventurados los pacificadores, porque ellos serán llamados hijos de Dios.', r:'Mateo 5:9'},{t:'El efecto de la justicia será paz; y la labor de la justicia, reposo y seguridad para siempre.', r:'Isaías 32:17'}],
+  esperanza:[{t:'Porque yo sé los pensamientos que tengo acerca de vosotros, pensamientos de paz, y no de mal, para daros el fin que esperáis.', r:'Jeremías 29:11'},{t:'Los que esperan a Jehová tendrán nuevas fuerzas; levantarán alas como las águilas.', r:'Isaías 40:31'},{t:'Y la esperanza no avergüenza; porque el amor de Dios ha sido derramado en nuestros corazones.', r:'Romanos 5:5'},{t:'Espera en Jehová; esfuérzate, y aliéntese tu corazón; sí, espera a Jehová.', r:'Salmo 27:14'},{t:'Bienaventurado el hombre cuya esperanza es Jehová su Dios.', r:'Salmo 146:5'},{t:'A los que aman a Dios, todas las cosas les ayudan a bien.', r:'Romanos 8:28'},{t:'Las cosas que ojo no vio, ni oído oyó... son las que Dios ha preparado para los que le aman.', r:'1 Corintios 2:9'},{t:'Retengamos firme, sin fluctuar, la profesión de nuestra esperanza, porque fiel es el que prometió.', r:'Hebreos 10:23'}],
+  gratitud:[{t:'Dad gracias en todo, porque esta es la voluntad de Dios para con vosotros en Cristo Jesús.', r:'1 Tesalonicenses 5:18'},{t:'Alabad a Jehová, porque él es bueno; porque para siempre es su misericordia.', r:'Salmo 136:1'},{t:'Bendice, alma mía, a Jehová, y no olvides ninguno de sus beneficios.', r:'Salmo 103:2'},{t:'Entrad por sus puertas con acción de gracias, por sus atrios con alabanza.', r:'Salmo 100:4'},{t:'Toda buena dádiva y todo don perfecto desciende de lo alto, del Padre de las luces.', r:'Santiago 1:17'},{t:'Gracias a Dios por su don inefable.', r:'2 Corintios 9:15'},{t:'Cantad a Jehová, porque ha hecho cosas magníficas.', r:'Isaías 12:5'},{t:'Grande es Jehová, y digno de suprema alabanza.', r:'Salmo 145:3'}]
+};
+const storyCats = [
+  {id:'at', name:'Antiguo Testamento'},
+  {id:'jesus', name:'Vida de Jesús'},
+  {id:'parabolas', name:'Parábolas'},
+  {id:'iglesia', name:'La Iglesia'}
+];
+const stories = [
+  {id:'creacion', em:'🌅', name:'La Creación', sub:'Génesis 1-2', cat:'at', text:['En el principio creó Dios los cielos y la tierra. Y la tierra estaba desordenada y vacía, y las tinieblas estaban sobre la faz del abismo, y el Espíritu de Dios se movía sobre la faz de las aguas.','Y dijo Dios: Sea la luz; y fue la luz. Y vio Dios que la luz era buena; y separó Dios la luz de las tinieblas. A la luz llamó Día, y a las tinieblas llamó Noche. Y fue la tarde y la mañana un día.','En el segundo día separó las aguas, formando el cielo. En el tercero juntó las aguas y apareció la tierra seca, y ordenó que brotara la hierba, las plantas y los árboles con su fruto, cada uno según su especie.','En el cuarto día hizo el sol para el día y la luna y las estrellas para la noche. En el quinto llenó los mares de peces y el cielo de aves, y los bendijo para que se multiplicaran.','En el sexto día hizo los animales de la tierra. Y dijo Dios: Hagamos al hombre a nuestra imagen, conforme a nuestra semejanza. Y creó Dios al hombre; varón y hembra los creó, y los bendijo, y les dio dominio sobre la creación.','Y vio Dios todo lo que había hecho, y he aquí que era bueno en gran manera. El séptimo día reposó de toda su obra, y lo santificó. Así, desde el principio, todo lo que existe salió de las manos de un Dios de amor y de orden.']},
+  {id:'adaneva', em:'🌳', name:'Adán y Eva', sub:'Génesis 2-3', cat:'at', text:['Dios formó al hombre del polvo de la tierra y sopló en su nariz aliento de vida. Lo puso en el huerto del Edén, un lugar hermoso, para que lo cultivara y lo guardara.','Viendo que no era bueno que el hombre estuviera solo, Dios hizo caer un sueño profundo sobre Adán y de su costilla formó a la mujer, Eva. Y fueron una sola carne, sin vergüenza, en perfecta comunión con Dios.','Dios les permitió comer de todo árbol del huerto, excepto del árbol de la ciencia del bien y del mal, pues el día que comieran de él, morirían.','Pero la serpiente, astuta, engañó a Eva: "No moriréis; seréis como Dios." Ella tomó del fruto, comió, y dio también a su marido. Entonces sus ojos fueron abiertos y conocieron la vergüenza.','Cuando Dios los buscó, ellos se escondieron. Por su desobediencia fueron sacados del huerto, y entró el dolor y la muerte al mundo. Pero Dios, en su amor, ya prometía un Salvador que un día vencería a la serpiente.','Es la historia de cómo el pecado entró al mundo, pero también del primer destello de la gracia: Dios no abandonó al hombre, sino que comenzó desde ese día su plan de redención.']},
+  {id:'noe', em:'🌈', name:'El Arca de Noé', sub:'Génesis 6-9', cat:'at', text:['La maldad de los hombres había crecido tanto sobre la tierra que todo pensamiento de su corazón era de continuo solo el mal. Y le dolió a Dios haber hecho al hombre. Pero Noé halló gracia ante los ojos de Jehová, porque era un varón justo que caminaba con Dios.','Dios le dijo a Noé que enviaría un diluvio, y le mandó construir un arca de madera de gofer, con medidas exactas, cubierta de brea por dentro y por fuera. Noé obedeció en todo, aunque el pueblo se burlaba de él mientras la construía.','Cuando el arca estuvo lista, Dios hizo entrar a Noé, a su esposa, a sus tres hijos y sus esposas, junto con parejas de todos los animales, para conservar la vida sobre la tierra.','Se abrieron las fuentes del abismo y las ventanas de los cielos. Llovió cuarenta días y cuarenta noches, y las aguas subieron y cubrieron aun los montes más altos. Solo quedó con vida lo que estaba en el arca.','Pasado el diluvio, Dios envió un viento, y las aguas descendieron. Noé soltó una paloma que volvió con una hoja de olivo: la tierra estaba seca. Salieron del arca y Noé levantó altar y adoró a Dios.','Entonces Dios puso el arco iris en las nubes como señal de su pacto eterno: nunca más destruiría toda carne con un diluvio. Fue promesa de misericordia, y recordatorio de que Dios guarda a los suyos en medio de la tormenta.']},
+  {id:'abraham', em:'✨', name:'La fe de Abraham', sub:'Génesis 12-22', cat:'at', text:['Jehová dijo a Abram: Vete de tu tierra y de tu parentela, a la tierra que te mostraré. Y haré de ti una nación grande, y serán benditas en ti todas las familias de la tierra.','Abraham creyó y salió sin saber a dónde iba, confiando solo en la palabra de Dios. Aunque él y su esposa Sara eran ancianos y sin hijos, Dios le prometió una descendencia tan numerosa como las estrellas del cielo.','Los años pasaron y la promesa parecía imposible. Pero cuando Abraham tenía cien años y Sara noventa, nació Isaac, el hijo de la promesa, y su casa se llenó de risa y alegría.','Un día, Dios probó a Abraham y le pidió que ofreciera a Isaac en sacrificio. Con el corazón quebrantado pero obediente, Abraham subió al monte. Confiaba en que Dios proveería.','Cuando levantó el cuchillo, el ángel de Jehová lo detuvo: "No hagas nada al muchacho, porque ya conozco que temes a Dios." Y apareció un carnero trabado en un zarzal, que Abraham ofreció en lugar de su hijo.','Por su fe, Abraham fue llamado amigo de Dios y padre de todos los creyentes. Su historia nos enseña a confiar aun cuando no entendemos, porque Jehová-jireh, el Señor, siempre provee.']},
+  {id:'jose', em:'👑', name:'José y sus hermanos', sub:'Génesis 37-45', cat:'at', text:['José era el hijo amado de Jacob, quien le hizo una túnica de muchos colores. Sus hermanos lo envidiaban, y más aún cuando José contó sus sueños, en los que ellos se inclinaban ante él.','Llenos de celos, lo arrojaron a un pozo y luego lo vendieron a unos mercaderes que iban a Egipto. Le dijeron a su padre que una fiera lo había devorado, y Jacob lloró a su hijo por muchos días.','En Egipto, José sirvió con fidelidad en casa de Potifar, pero fue calumniado y echado a la cárcel injustamente. Sin embargo, Jehová estaba con él, y aun allí prosperaba todo lo que hacía.','José interpretó los sueños del faraón: vendrían siete años de abundancia y siete de hambre. El faraón, admirado por su sabiduría, lo puso como gobernador de todo Egipto para guardar el alimento.','Cuando llegó el hambre, los hermanos de José vinieron a Egipto a comprar comida, sin reconocerlo. José, conmovido, se dio a conocer entre lágrimas y los perdonó.','"Vosotros pensasteis mal contra mí, mas Dios lo encaminó a bien", les dijo. Trajo a su padre y a toda su familia a Egipto. Es una hermosa historia de perdón, y de cómo Dios convierte el dolor en propósito.']},
+  {id:'moises', em:'🔥', name:'Moisés y el éxodo', sub:'Éxodo 3-14', cat:'at', text:['El pueblo de Israel gemía bajo la dura esclavitud de Egipto. Dios escuchó su clamor y llamó a Moisés desde una zarza que ardía sin consumirse: "He visto la aflicción de mi pueblo; ven, te enviaré a Faraón para que saques a mi pueblo."','Moisés se sintió incapaz, pero Dios prometió estar con él. Junto a su hermano Aarón, se presentó ante el faraón y le dijo: "Jehová dice: Deja ir a mi pueblo." Pero el faraón endureció su corazón y se negó.','Entonces Dios envió diez plagas sobre Egipto: el agua en sangre, las ranas, los piojos, las moscas, la peste, las úlceras, el granizo, las langostas, las tinieblas, y por último la muerte de los primogénitos.','Aquella noche, cada familia israelita marcó su puerta con la sangre de un cordero, y la muerte pasó de largo: fue la primera Pascua. Finalmente el faraón los dejó salir, y el pueblo partió con gran multitud.','Pero el faraón se arrepintió y los persiguió hasta el Mar Rojo. El pueblo temió, pero Moisés dijo: "No temáis; ved la salvación de Jehová." Extendió su mano y Dios abrió las aguas; Israel cruzó en seco.','Cuando los egipcios entraron tras ellos, las aguas volvieron y los cubrieron. Israel fue libre. Dios los guió con nube de día y columna de fuego de noche. Es la gran historia de la liberación por el poder de Dios.']},
+  {id:'diez', em:'📜', name:'Los Diez Mandamientos', sub:'Éxodo 19-20', cat:'at', text:['Tres meses después de salir de Egipto, el pueblo llegó al desierto de Sinaí y acampó frente al monte. Dios llamó a Moisés a subir, y descendió sobre el monte en fuego, humo y truenos.','Allí, en medio de la gloria de Dios, Moisés recibió las tablas de la ley: diez palabras que enseñan a amar a Dios y al prójimo, escritas por el dedo mismo de Dios.','Los primeros mandamientos hablan del amor a Dios: no tener otros dioses, no hacer imágenes para adorarlas, no tomar su nombre en vano, y guardar el día de reposo.','Los demás enseñan a amar al prójimo: honrar a los padres, no matar, no cometer adulterio, no robar, no mentir y no codiciar lo ajeno.','El pueblo prometió obedecer, pero pronto olvidó su promesa. Aun así, la ley reveló la santidad de Dios y la necesidad que todos tenemos de su gracia.','Jesús resumiría toda la ley en dos mandamientos: amar a Dios sobre todas las cosas y amar al prójimo como a uno mismo. En el amor se cumple toda la ley.']},
+  {id:'josue', em:'🎺', name:'Josué y Jericó', sub:'Josué 6', cat:'at', text:['Tras la muerte de Moisés, Josué guió a Israel a la tierra prometida. La primera ciudad, Jericó, estaba fuertemente amurallada y cerrada a cal y canto por causa de los hijos de Israel.','Dios dio a Josué una orden extraña: durante seis días, el pueblo marcharía una vez al día alrededor de la ciudad, con siete sacerdotes tocando trompetas delante del arca del pacto.','El pueblo obedeció en silencio, día tras día, confiando aunque no entendían. La fe muchas veces es marchar aun cuando el muro sigue en pie.','Al séptimo día, dieron siete vueltas. Entonces los sacerdotes tocaron las trompetas y Josué dijo: "¡Gritad, porque Jehová os ha entregado la ciudad!"','El pueblo gritó a gran voz, y los muros de Jericó cayeron por completo. La ciudad fue tomada, no por la fuerza de los hombres, sino por la obediencia y el poder de Dios.','Rahab, la mujer que había escondido a los espías, fue salvada con su familia. Es la historia de cómo la fe derriba murallas imposibles cuando confiamos en Dios.']},
+  {id:'sanson', em:'💪', name:'Sansón', sub:'Jueces 13-16', cat:'at', text:['Sansón nació por promesa de Dios para librar a Israel de los filisteos. Desde el vientre fue nazareo: su cabello nunca sería cortado, como señal de su consagración, y en él residía una fuerza sobrenatural.','Con esa fuerza, Sansón hizo grandes proezas: mató a un león con sus manos y derrotó a ejércitos enteros. Pero también fue débil de carácter y cayó en malas decisiones.','Se enamoró de Dalila, quien fue sobornada por los filisteos para descubrir el secreto de su fuerza. Ella insistió hasta que Sansón le reveló que estaba en su cabello.','Mientras dormía, cortaron su cabello. Al despertar, su fuerza lo había dejado. Los filisteos lo capturaron, le sacaron los ojos y lo pusieron a moler en la cárcel, humillado.','Pero su cabello comenzó a crecer de nuevo. Un día lo llevaron a un templo lleno de gente para burlarse de él. Sansón oró: "Señor, acuérdate de mí, y fortaléceme solo esta vez."','Con fuerzas renovadas, empujó las columnas del templo, que se derrumbó sobre miles de filisteos. Fue su mayor victoria. Su historia nos enseña que Dios da nuevas oportunidades a quien vuelve a Él.']},
+  {id:'rut', em:'🌾', name:'Rut y Noemí', sub:'Libro de Rut', cat:'at', text:['Noemí quedó viuda en tierra extranjera, y también murieron sus dos hijos. Decidió regresar a Belén, su tierra, y les dijo a sus nueras que volvieran con sus familias.','Una de ellas, Rut, se negó a dejarla, y pronunció palabras hermosas: "A dondequiera que tú fueres, iré yo; tu pueblo será mi pueblo, y tu Dios mi Dios." Y se fue con ella.','En Belén, siendo pobres, Rut salió a recoger espigas que quedaban en los campos para alimentar a Noemí. Por providencia, llegó al campo de Booz, un hombre justo y pariente de la familia.','Booz, al saber de su fidelidad hacia Noemí, la trató con bondad y la protegió, mandando que dejaran espigas de más para ella. Rut halló gracia a sus ojos.','Según la ley, Booz podía redimir la herencia de la familia y tomar a Rut por esposa. Con honor, lo hizo, y se casaron. Dios cambió el luto en gozo.','Rut tuvo un hijo, Obed, quien fue abuelo del rey David, del linaje del cual vendría Jesús. Es una historia de lealtad, humildad y de cómo Dios cuida a los que confían en Él.']},
+  {id:'samuel', em:'🕯️', name:'El niño Samuel', sub:'1 Samuel 1-3', cat:'at', text:['Ana era una mujer que no podía tener hijos, y lloraba delante de Jehová. En el templo oró con tanta angustia que sus labios se movían sin voz, pidiendo un hijo.','Dios escuchó su oración y le dio un niño, a quien llamó Samuel. Agradecida, Ana lo dedicó al Señor, y cuando creció lo llevó al templo para que sirviera a Dios junto al sacerdote Elí.','Una noche, mientras Samuel dormía, oyó una voz que lo llamaba. Corrió a Elí, pero no era él. Sucedió tres veces, hasta que Elí comprendió que era Dios quien llamaba al niño.','Elí le enseñó a responder: "Habla, Jehová, porque tu siervo oye." Samuel obedeció, y Dios comenzó a hablarle y a revelarle su palabra.','Samuel creció, y Jehová estaba con él; no dejó caer a tierra ninguna de sus palabras. Todo Israel supo que Samuel era profeta fiel del Señor.','Es la historia de un corazón dispuesto a escuchar a Dios desde pequeño, y de una madre que confió su mayor tesoro en las manos del Señor.']},
+  {id:'david', em:'⚔️', name:'David y Goliat', sub:'1 Samuel 17', cat:'at', text:['Los filisteos y los israelitas estaban en guerra. De entre los filisteos salía un gigante llamado Goliat, de casi tres metros de altura, que desafiaba cada día al ejército de Israel, y todos temblaban de miedo.','David, un joven pastor, llegó al campamento a llevar comida a sus hermanos. Al oír las burlas del gigante contra el Dios vivo, se llenó de santo valor y se ofreció a pelear.','El rey Saúl dudó por su juventud, pero David respondió: "Jehová, que me ha librado de las garras del león y del oso, él me librará de la mano de este filisteo."','Rechazó la pesada armadura del rey. Tomó solo su cayado, su honda y cinco piedras lisas del arroyo, y se acercó al gigante en el nombre de Jehová de los ejércitos.','Goliat se burló, pero David corrió hacia él, tomó una piedra y la lanzó con la honda. La piedra se clavó en la frente del gigante, que cayó a tierra. Así venció David sin espada.','Israel obtuvo la victoria. La historia nos enseña que no importa el tamaño del gigante que enfrentemos: cuando la batalla es de Dios, Él pelea por nosotros.']},
+  {id:'salomon', em:'💎', name:'La sabiduría de Salomón', sub:'1 Reyes 3', cat:'at', text:['Salomón, hijo de David, llegó a ser rey de Israel. Una noche Dios se le apareció en sueños y le dijo: "Pide lo que quieras que yo te dé."','Salomón pudo pedir riquezas, larga vida o la muerte de sus enemigos. Pero pidió: "Dame un corazón entendido para juzgar a tu pueblo, y para discernir entre lo bueno y lo malo."','A Dios le agradó tanto su petición que le dio sabiduría como nadie tuvo antes ni después, y además le añadió riquezas y honra que no había pedido.','Poco después, dos mujeres vinieron ante él disputando por un niño, ambas diciendo ser la madre. Salomón ordenó partir al niño en dos, para dárselo a ambas.','La verdadera madre, con el corazón lleno de amor, rogó que no lo mataran y que se lo dieran a la otra. Así Salomón supo quién era la madre y le entregó a su hijo.','Todo Israel admiró la sabiduría de Dios que había en él. La historia nos enseña a pedir a Dios sabiduría antes que cualquier otra cosa, pues vale más que el oro.']},
+  {id:'elias', em:'🔥', name:'Elías en el monte Carmelo', sub:'1 Reyes 18', cat:'at', text:['En días de gran apostasía, el profeta Elías se levantó solo contra cuatrocientos cincuenta profetas de Baal. Retó al pueblo: "¿Hasta cuándo claudicaréis entre dos pensamientos? Si Jehová es Dios, seguidle."','Propuso una prueba en el monte Carmelo: cada lado prepararía un sacrificio sin fuego, y el Dios que respondiera con fuego del cielo, ese sería el verdadero Dios.','Los profetas de Baal clamaron desde la mañana hasta la tarde, gritaron y se hirieron, pero no hubo respuesta ni voz alguna. Su dios no existía.','Entonces Elías reparó el altar de Jehová, puso el sacrificio y mandó derramar mucha agua sobre él, hasta empapar todo. Luego oró con sencillez: "Jehová, sea hoy manifiesto que tú eres Dios en Israel."','Al instante cayó fuego de Jehová y consumió el holocausto, la leña, las piedras y hasta el agua. El pueblo cayó sobre su rostro clamando: "¡Jehová es el Dios! ¡Jehová es el Dios!"','Es la historia de un hombre que confió en Dios frente a la multitud, y del Dios que responde con poder a la oración de fe.']},
+  {id:'job', em:'🌾', name:'La fe de Job', sub:'Libro de Job', cat:'at', text:['Job era un hombre perfecto y recto, temeroso de Dios, muy rico y padre de diez hijos. En un solo día lo perdió casi todo: sus bienes, sus siervos y todos sus hijos.','Aun en medio de tanto dolor, Job cayó a tierra, adoró y dijo: "Desnudo salí del vientre de mi madre, y desnudo volveré. Jehová dio, y Jehová quitó; sea el nombre de Jehová bendito."','Después perdió también su salud, cubierto de llagas de pies a cabeza. Su esposa le dijo que maldijera a Dios, pero él respondió: "¿Recibiremos de Dios el bien, y el mal no lo recibiremos?"','Sus amigos vinieron y lo acusaron, pensando que sufría por algún pecado. Job clamó a Dios entre lágrimas, sin entender el porqué, pero sin soltar su fe.','Al final, Dios mismo le habló desde un torbellino, mostrándole su grandeza. Job se humilló y confió más que nunca: "Yo te conocía de oídas, mas ahora mis ojos te ven."','Entonces Dios restauró a Job y le dio el doble de todo lo que tenía. Su historia nos enseña que, aun en la prueba más oscura, Dios es fiel y tiene la última palabra.']},
+  {id:'ester', em:'👸', name:'La reina Ester', sub:'Libro de Ester', cat:'at', text:['Ester era una joven judía, huérfana, criada por su primo Mardoqueo. Por su belleza y gracia, llegó a ser reina de Persia, aunque nadie sabía que era judía.','El malvado Amán, alto oficial del rey, tramó un decreto para exterminar a todos los judíos del reino. Mardoqueo pidió a Ester que intercediera ante el rey por su pueblo.','Era peligroso presentarse ante el rey sin ser llamada; podía costarle la vida. Pero Mardoqueo le dijo: "¿Quién sabe si para esta hora has llegado al reino?"','Ester pidió que todos ayunaran por ella tres días, y decidió arriesgarlo todo: "Si perezco, que perezca." Con valentía y fe entró ante el rey, quien la recibió con favor.','En un banquete, Ester reveló el plan de Amán y suplicó por su pueblo. El rey se indignó, y el mismo Amán fue castigado, mientras los judíos fueron librados de la muerte.','Es la historia de una mujer valiente que Dios usó para salvar a su pueblo, colocada por su providencia en el lugar preciso y en el momento exacto.']},
+  {id:'horno', em:'🔥', name:'Los tres jóvenes en el horno', sub:'Daniel 3', cat:'at', text:['El rey Nabucodonosor levantó una enorme estatua de oro y ordenó que todos se inclinaran ante ella al sonar la música, bajo pena de ser echados en un horno de fuego ardiendo.','Tres jóvenes hebreos —Sadrac, Mesac y Abed-nego— se negaron a adorar la estatua, pues solo servían al Dios verdadero. Fueron acusados y llevados ante el rey furioso.','Ellos respondieron con firmeza: "Nuestro Dios puede librarnos; y si no, sábete que no serviremos a tus dioses ni adoraremos tu estatua." Su fe no dependía del resultado.','El rey, enfurecido, mandó calentar el horno siete veces más, tan caliente que la llama mató a los soldados que los echaron dentro. Los tres cayeron atados en medio del fuego.','Pero el rey se asombró: "¿No echamos a tres? Yo veo cuatro hombres sueltos, y el aspecto del cuarto es semejante a un hijo de los dioses." Dios estaba con ellos en el fuego.','Salieron ilesos, sin olor a humo ni un cabello quemado. El rey bendijo al Dios de ellos. La historia nos enseña que Dios está con nosotros aun en medio de la prueba más ardiente.']},
+  {id:'daniel', em:'🦁', name:'Daniel en el foso de los leones', sub:'Daniel 6', cat:'at', text:['Daniel servía en el reino con tal integridad que el rey pensaba ponerlo sobre todo el reino. Los demás gobernadores, llenos de envidia, buscaron cómo acusarlo, pero no hallaron falta en él.','Sabiendo que Daniel era fiel a Dios, tramaron una ley: que por treinta días nadie orara a otro dios ni hombre, sino solo al rey, bajo pena de ser echado a los leones. El rey firmó el decreto.','Cuando Daniel supo del decreto, entró en su casa y, con las ventanas abiertas hacia Jerusalén, se arrodilló tres veces al día como siempre, orando y dando gracias a su Dios.','Sus enemigos lo sorprendieron orando y lo acusaron. El rey, que amaba a Daniel, se afligió y buscó librarlo todo el día, pero la ley no podía cambiarse. A regañadientes, lo echaron al foso.','El rey pasó la noche en ayuno, sin dormir. Al amanecer corrió al foso y gritó: "Daniel, ¿te ha podido librar tu Dios?" Y Daniel respondió: "Mi Dios envió su ángel y cerró la boca de los leones."','Daniel salió sin lesión alguna, porque confió en su Dios. El rey proclamó por todo el reino que el Dios de Daniel es el Dios viviente. La fidelidad siempre tiene su recompensa.']},
+  {id:'jonas', em:'🐋', name:'Jonás y el gran pez', sub:'Libro de Jonás', cat:'at', text:['Dios llamó a Jonás y le dijo: "Levántate y ve a Nínive, aquella gran ciudad, y predica contra ella." Pero Jonás no quería, y huyó en un barco rumbo a Tarsis, en dirección contraria.','En el mar se levantó una tempestad tan grande que el barco estaba a punto de romperse. Los marineros clamaban cada uno a su dios, mientras Jonás dormía. Al fin comprendieron que la tormenta era por causa de él.','Jonás confesó: "Tomadme y echadme al mar, y se os aquietará." Con temor lo lanzaron al agua, y al instante el mar se calmó. Pero Dios tenía preparado un gran pez que se tragó a Jonás.','Tres días y tres noches estuvo Jonás en el vientre del pez. Allí, en lo profundo, oró arrepentido: "Invoqué en mi angustia a Jehová, y él me oyó." Entonces el pez lo vomitó en tierra seca.','Dios habló a Jonás por segunda vez, y esta vez obedeció. Fue a Nínive y predicó: "De aquí a cuarenta días Nínive será destruida." Toda la ciudad, desde el rey hasta el más pequeño, se arrepintió y ayunó.','Al ver Dios su arrepentimiento, tuvo misericordia y no los destruyó. La historia nos enseña que no se puede huir de Dios, que Él da segundas oportunidades, y que su gracia alcanza a todos.']},
+  {id:'nacimiento', em:'⭐', name:'El nacimiento de Jesús', sub:'Lucas 2', cat:'jesus', text:['El ángel Gabriel fue enviado a una joven llamada María, y le anunció: "Concebirás en tu vientre, y darás a luz un hijo, y llamarás su nombre Jesús. Este será grande, e Hijo del Altísimo será llamado."','Por aquellos días, el emperador ordenó un censo, y todos debían inscribirse en su ciudad. José subió con María, su esposa encinta, desde Nazaret hasta Belén, la ciudad de David.','Estando allí, se cumplieron los días, y María dio a luz a su hijo primogénito. Lo envolvió en pañales y lo acostó en un pesebre, porque no había lugar para ellos en el mesón.','Aquella noche, unos pastores cuidaban sus rebaños en el campo. De pronto un ángel se les apareció y la gloria de Dios los rodeó: "No temáis; os ha nacido hoy un Salvador, que es Cristo el Señor."','Y una multitud de ángeles alababa a Dios diciendo: "¡Gloria a Dios en las alturas, y en la tierra paz, buena voluntad para con los hombres!" Los pastores fueron corriendo y hallaron al niño.','Después, unos sabios del oriente, guiados por una estrella, llegaron a adorarle y le ofrecieron oro, incienso y mirra. Así se cumplió la promesa: Emanuel, Dios con nosotros. El amor de Dios se hizo hombre para salvarnos.']},
+  {id:'tempestad', em:'🌊', name:'Jesús calma la tempestad', sub:'Marcos 4', cat:'jesus', text:['Al caer la tarde, Jesús dijo a sus discípulos: "Pasemos al otro lado del lago." Dejaron la multitud y partieron en la barca, y Jesús, cansado, se durmió sobre un cabezal en la popa.','De repente se levantó una gran tempestad de viento, y las olas azotaban la barca de tal manera que ya se llenaba de agua. Los discípulos, muchos de ellos pescadores expertos, temieron por su vida.','Asustados, despertaron a Jesús gritando: "Maestro, ¿no tienes cuidado que perecemos?" Él se levantó tranquilo, en medio del caos.','Reprendió al viento y dijo al mar: "Calla, enmudece." Y al instante cesó el viento, y se hizo una gran bonanza. Todo quedó en perfecta calma.','Luego les preguntó: "¿Por qué estáis así amedrentados? ¿Cómo no tenéis fe?" Y ellos, llenos de asombro, se decían: "¿Quién es este, que aun el viento y el mar le obedecen?"','La historia nos enseña que, aunque el Señor parezca dormido en medio de nuestra tormenta, Él está en la barca con nosotros, y una sola palabra suya basta para traer la calma.']},
+  {id:'panes', em:'🍞', name:'La multiplicación de los panes', sub:'Juan 6', cat:'jesus', text:['Una gran multitud seguía a Jesús porque veían las señales que hacía sanando a los enfermos. Subió a un monte y se sentó con sus discípulos, y vio venir hacia él a miles de personas.','Al acercarse la hora de comer, Jesús preguntó a Felipe dónde comprarían pan para todos. Era imposible: ni el salario de muchos meses alcanzaría para dar un poco a cada uno.','Andrés le dijo: "Aquí está un muchacho que tiene cinco panes de cebada y dos pececillos; mas ¿qué es esto para tantos?" Parecía muy poco para tanta necesidad.','Jesús mandó que la gente se recostara sobre la hierba: había unos cinco mil hombres, sin contar mujeres y niños. Tomó los panes, y habiendo dado gracias, comenzó a repartir.','Repartió pan y pescado a todos cuanto querían, y todos comieron hasta saciarse. Después recogieron doce cestas llenas de lo que sobró. Nada faltó, y aún sobró en abundancia.','La historia nos enseña que cuando ponemos lo poco que tenemos en las manos de Jesús, Él lo multiplica. Lo que para nosotros es insuficiente, en sus manos alcanza y sobra.']},
+  {id:'lazaro', em:'🌟', name:'La resurrección de Lázaro', sub:'Juan 11', cat:'jesus', text:['Lázaro, hermano de María y Marta y amigo de Jesús, cayó gravemente enfermo. Sus hermanas mandaron avisar: "Señor, el que amas está enfermo." Pero Jesús se quedó dos días más donde estaba.','Cuando llegó a Betania, Lázaro llevaba ya cuatro días en el sepulcro. Marta salió a su encuentro y le dijo: "Señor, si hubieses estado aquí, mi hermano no habría muerto."','Jesús le respondió: "Yo soy la resurrección y la vida; el que cree en mí, aunque esté muerto, vivirá." Y al ver llorar a María y a los que la acompañaban, Jesús se conmovió y lloró.','Fueron al sepulcro, una cueva con una piedra encima. Jesús dijo: "Quitad la piedra." Marta dudó por el mal olor, pero Jesús le recordó: "¿No te dije que si crees, verás la gloria de Dios?"','Entonces Jesús alzó los ojos al cielo, dio gracias al Padre y clamó a gran voz: "¡Lázaro, ven fuera!" Y el que había muerto salió, atado de pies y manos con vendas.','Muchos creyeron en Jesús aquel día. La historia nos muestra que para Dios no hay situación sin esperanza: Él es el Señor de la vida, y aun lo que parece muerto puede volver a vivir.']},
+  {id:'crucifixion', em:'🕊️', name:'La cruz y la resurrección', sub:'Lucas 23-24', cat:'jesus', text:['Jesús, siendo inocente, fue entregado, juzgado injustamente y condenado a morir en una cruz. Llevó sobre sí el peso del pecado del mundo, no por culpa suya, sino por amor a nosotros.','En el Calvario lo crucificaron entre dos malhechores. Aun allí, oró por quienes lo herían: "Padre, perdónalos, porque no saben lo que hacen." Y a un ladrón arrepentido le prometió el paraíso.','Al mediodía, las tinieblas cubrieron la tierra. Jesús clamó a gran voz: "Padre, en tus manos encomiendo mi espíritu", e inclinando la cabeza, entregó su vida. El velo del templo se rasgó en dos.','Lo sepultaron en una tumba nueva y pusieron una gran piedra a la entrada, con guardias vigilando. Sus discípulos quedaron sumidos en tristeza, creyendo que todo había terminado.','Pero al tercer día, muy de mañana, unas mujeres fueron al sepulcro y hallaron la piedra removida. Un ángel les dijo: "¿Por qué buscáis entre los muertos al que vive? No está aquí, ha resucitado."','¡Jesús vive! Se apareció a sus discípulos, comió con ellos y les dio esperanza. Por su muerte fuimos perdonados, y por su resurrección tenemos vida eterna. Este es el corazón del evangelio.']},
+  {id:'samaritano', em:'❤️', name:'El buen samaritano', sub:'Lucas 10', cat:'parabolas', text:['Un maestro de la ley preguntó a Jesús: "¿Quién es mi prójimo?" Y Jesús respondió con una historia que cambiaría para siempre la manera de ver al necesitado.','Un hombre bajaba de Jerusalén a Jericó y cayó en manos de ladrones, que lo despojaron, lo hirieron y lo dejaron medio muerto en el camino.','Pasó un sacerdote, lo vio, y siguió de largo por el otro lado. Luego pasó un levita, hombre religioso, y también lo evitó. Ninguno se detuvo a ayudar.','Pero un samaritano, despreciado por los judíos, al verlo tuvo compasión. Se acercó, curó sus heridas con aceite y vino, lo puso en su cabalgadura y lo llevó a un mesón para cuidarlo.','Al día siguiente pagó al mesonero y dijo: "Cuídamelo, y todo lo que gastes de más, yo te lo pagaré cuando vuelva." Su amor no tuvo límites ni buscó recompensa.','Jesús preguntó: "¿Cuál de los tres fue el prójimo del herido?" Y concluyó: "Ve, y haz tú lo mismo." La historia nos enseña que amar al prójimo es actuar con misericordia, sin importar quién sea.']},
+  {id:'prodigo', em:'🏠', name:'El hijo pródigo', sub:'Lucas 15', cat:'parabolas', text:['Un hombre tenía dos hijos. El menor le pidió su parte de la herencia, y el padre se la dio. Poco después, el joven se fue lejos a un país extraño y malgastó todo viviendo perdidamente.','Cuando lo hubo gastado todo, vino una gran hambre, y comenzó a pasar necesidad. Terminó cuidando cerdos, y deseaba llenar su estómago con la comida de ellos, pero nadie le daba nada.','Entonces, volviendo en sí, dijo: "¡Cuántos jornaleros en casa de mi padre tienen pan, y yo aquí perezco de hambre! Me levantaré e iré a mi padre, y le diré: Padre, he pecado."','Se levantó y fue. Y cuando aún estaba lejos, su padre lo vio y fue movido a misericordia; corrió, se echó sobre su cuello y lo besó, sin dejarlo terminar sus disculpas.','El padre mandó traer el mejor vestido, un anillo y calzado, y celebró una gran fiesta: "Este mi hijo muerto era, y ha revivido; se había perdido, y es hallado." Y comenzaron a regocijarse.','La historia nos revela el corazón de Dios: por más lejos que vayamos, Él espera con los brazos abiertos, listo para perdonar y recibirnos con fiesta cuando volvemos a casa.']},
+  {id:'oveja', em:'🐑', name:'La oveja perdida', sub:'Lucas 15', cat:'parabolas', text:['Los publicanos y pecadores se acercaban a Jesús para oírle, y los religiosos murmuraban: "Este recibe a los pecadores, y come con ellos." Entonces Jesús les contó una parábola.','"¿Qué hombre de vosotros, teniendo cien ovejas, si pierde una de ellas, no deja las noventa y nueve en el desierto y va tras la que se perdió, hasta encontrarla?"','El pastor no se conforma con las que tiene. Aquella sola oveja perdida le importa tanto que sale a buscarla por montes y valles, sin descansar, hasta hallarla.','"Y cuando la encuentra, la pone sobre sus hombros gozoso; y al llegar a casa, reúne a sus amigos y vecinos, diciéndoles: Gozaos conmigo, porque he encontrado mi oveja que se había perdido."','Así, dijo Jesús, "habrá más gozo en el cielo por un pecador que se arrepiente, que por noventa y nueve justos que no necesitan arrepentimiento."','La historia nos muestra cuánto vale cada alma para Dios. Nunca somos un número: si te has sentido perdido, sábete que el Buen Pastor sale a buscarte a ti.']},
+  {id:'pentecostes', em:'🔥', name:'El día de Pentecostés', sub:'Hechos 2', cat:'iglesia', text:['Antes de subir al cielo, Jesús prometió a sus discípulos: "Recibiréis poder cuando haya venido sobre vosotros el Espíritu Santo, y me seréis testigos hasta lo último de la tierra."','Obedeciendo, unos ciento veinte discípulos se reunían a orar en el aposento alto, unánimes, esperando la promesa del Padre. No sabían cómo vendría, pero perseveraban juntos en oración.','Cuando llegó el día de Pentecostés, de repente vino del cielo un estruendo como de un viento recio que llenó toda la casa donde estaban reunidos.','Y aparecieron lenguas repartidas, como de fuego, asentándose sobre cada uno de ellos. Todos fueron llenos del Espíritu Santo y comenzaron a hablar en otras lenguas, según el Espíritu les daba que hablasen.','La ciudad se conmovió. Pedro se puso de pie y predicó con valentía sobre Jesús muerto y resucitado. Aquellos que antes tenían miedo, ahora anunciaban el evangelio con poder.','Aquel día se añadieron como tres mil personas a la iglesia. Nació así la iglesia con fuego. Y aquella misma promesa del Espíritu Santo sigue siendo para ti y para los tuyos hoy.']},
+  {id:'pablo', em:'💡', name:'La conversión de Pablo', sub:'Hechos 9', cat:'iglesia', text:['Saulo era un feroz perseguidor de los cristianos. Respirando amenazas y muerte, iba camino a Damasco con cartas para apresar a todos los que siguieran a Jesús y llevarlos presos.','De repente, cerca de la ciudad, lo rodeó un resplandor de luz del cielo. Cayó a tierra, y oyó una voz que le decía: "Saulo, Saulo, ¿por qué me persigues?"','"¿Quién eres, Señor?", preguntó temblando. Y la voz respondió: "Yo soy Jesús, a quien tú persigues." Saulo quedó ciego, y lo llevaron de la mano hasta Damasco.','Durante tres días estuvo sin ver, sin comer ni beber, orando. Dios envió a un discípulo llamado Ananías, quien con temor pero en obediencia oró por él; y al instante Saulo recuperó la vista.','Aquel perseguidor se convirtió en el mayor predicador del evangelio. Cambió su nombre a Pablo, y recorrió el mundo anunciando a Cristo, fundando iglesias y escribiendo gran parte del Nuevo Testamento.','La historia nos enseña que nadie está demasiado lejos de la gracia de Dios. Si Él pudo transformar a Saulo, puede cambiar cualquier corazón, incluso el que hoy parece imposible.']}
+];
+const topics = {
+  mandamientos:{title:'Los 10 Mandamientos', em:'📜', ref:'Éxodo 20', items:['Amarás a Dios sobre todas las cosas; no tendrás dioses ajenos delante de mí.','No harás para ti imagen para adorarla.','No tomarás el nombre de Dios en vano.','Acuérdate del día de reposo para santificarlo.','Honra a tu padre y a tu madre.','No matarás.','No cometerás adulterio.','No hurtarás.','No dirás falso testimonio contra tu prójimo.','No codiciarás lo que es de tu prójimo.']},
+  projimo:{title:'Amar al prójimo', em:'❤️', ref:'La Palabra sobre el amor', items:['Amarás a tu prójimo como a ti mismo. (Marcos 12:31)','El amor es sufrido, es benigno; no tiene envidia, no busca lo suyo. (1 Corintios 13)','En esto conocerán todos que sois mis discípulos, si tuviereis amor los unos con los otros. (Juan 13:35)','Sobrellevad los unos las cargas de los otros, y cumplid así la ley de Cristo. (Gálatas 6:2)','El que no ama, no ha conocido a Dios; porque Dios es amor. (1 Juan 4:8)']},
+  buencristiano:{title:'Cómo ser buen cristiano', em:'🌟', ref:'Consejos para tu caminar', items:['Ora sin cesar y mantén una relación diaria con Dios. (1 Tes. 5:17)','Lee y medita en la Palabra cada día. (Salmo 1:2)','Congrégate con tus hermanos y no dejes de reunirte. (Hebreos 10:25)','Perdona como Cristo te perdonó. (Colosenses 3:13)','Sé humilde, sirve a otros y comparte tu fe con amor. (Filipenses 2:3)','Deja que el fruto del Espíritu se vea en ti: amor, gozo, paz, paciencia. (Gálatas 5:22)']}
+};
+const prayerThemes = ['Paz','Protección','Sanidad','Provisión','Gratitud','Fortaleza','Por mi familia','Perdón','Al despertar','Antes de dormir','Por los hijos','Sabiduría','En prueba','Por la iglesia'];
+const prayers = {
+  'Paz':['Padre celestial, en medio del ruido de este día vengo a ti buscando tu paz. Aquieta mi corazón, calma mis pensamientos y recuérdame que tú tienes el control. Que tu paz, que sobrepasa todo entendimiento, guarde mi mente y mi corazón. Confío en ti. En el nombre de Jesús, amén.','Señor, cuando la ansiedad toca mi puerta, elijo abrirte a ti. Lléname de tu calma, la que el mundo no puede dar. Enséñame a descansar en tu voluntad y a soltar lo que no puedo controlar. Tú eres mi refugio. Amén.'],
+  'Protección':['Señor, cúbreme bajo la sombra de tus alas. Rodéame a mí y a los que amo con tu protección. Que ningún mal nos alcance, y que tus ángeles acampen alrededor de nosotros. Tú eres mi refugio y mi fortaleza. Descanso seguro en ti. Amén.','Dios todopoderoso, sé mi escudo hoy. Guarda mi entrada y mi salida, mis pensamientos y mis pasos. Aparta todo peligro de mi camino y del de mi familia. En tus manos estamos seguros. Amén.'],
+  'Sanidad':['Dios de misericordia, tú eres mi sanador. Toca cada parte de mi cuerpo y de mi alma que necesita ser restaurada. Devuélveme las fuerzas, la salud y la esperanza. Creo en tu poder y me pongo en tus manos. Gracias por tu amor sanador. En Cristo, amén.','Señor Jesús, tú que sanaste a los enfermos, extiende tu mano sobre mí. Renueva mis fuerzas, quita todo dolor y lléname de tu vida. Confío en que tu tiempo es perfecto y tu amor no falla. Amén.'],
+  'Provisión':['Padre, tú conoces mis necesidades antes de que yo las pida. Confío en que abrirás puertas y proveerás lo necesario a su tiempo. Dame sabiduría para administrar lo que me das y un corazón agradecido. Tú eres Jehová mi proveedor. Amén.','Señor, gracias porque nunca me has faltado. Provee hoy el pan de cada día y calma mi preocupación. Ayúdame a trabajar con esfuerzo y a confiar en tu cuidado fiel. Tú suples toda necesidad. Amén.'],
+  'Gratitud':['Gracias, Señor, por el aliento de vida, por tu amor fiel y por cada bendición grande y pequeña. Gracias por sostenerme aun cuando no lo noto. Que mi vida sea una ofrenda de gratitud hacia ti cada día. Bendito seas por siempre. Amén.','Padre bueno, hoy quiero solo darte gracias. Por tu misericordia nueva cada mañana, por los que amo, por tu presencia. Mi corazón se alegra en ti. Recibe mi alabanza sincera. Amén.'],
+  'Fortaleza':['Señor, cuando me siento débil, tú eres mi fuerza. Levántame con tu mano poderosa y renueva mis fuerzas como las alas del águila. Ayúdame a seguir adelante confiando en que todo lo puedo en Cristo que me fortalece. Amén.','Dios mío, dame ánimo para este día. Cuando quiera rendirme, recuérdame que tú vas delante de mí. Sostén mis manos cansadas y llena mi corazón de esperanza. Contigo puedo seguir. Amén.'],
+  'Por mi familia':['Padre bueno, pongo a mi familia en tus manos. Guárdalos, guíalos y llénalos de tu amor. Que tu presencia habite en nuestro hogar, que haya unidad, perdón y fe. Que juntos te sirvamos todos los días de nuestra vida. Amén.','Señor, bendice a cada miembro de mi familia hoy. Protege a los que están lejos, sana lo que está herido y une nuestros corazones en tu amor. Que nuestro hogar sea un lugar donde tú reinas. Amén.'],
+  'Perdón':['Señor, reconozco mis faltas delante de ti. Perdóname y límpiame con tu gracia. Ayúdame también a perdonar a quienes me han herido, para caminar libre y en paz. Gracias porque tu misericordia es nueva cada mañana. En Jesús, amén.','Padre, libera mi corazón de todo rencor. Dame la gracia de perdonar como tú me has perdonado. Quita el peso de la culpa y lléname de tu paz. Quiero caminar limpio delante de ti. Amén.','Dios de gracia, crea en mí un corazón limpio y renueva un espíritu recto dentro de mí. Lava lo que me pesa y devuélveme el gozo de tu salvación. Gracias porque tu amor es más grande que mi error. Amén.'],
+  'Al despertar':['Buenos días, Señor. Gracias por un nuevo día lleno de tus misericordias. Toma mis manos, mis palabras y mis pasos hoy. Que en todo lo que haga te glorifique a ti. Guía mi camino y lléname de tu paz. En el nombre de Jesús, amén.','Padre, este es el día que tú hiciste; me gozaré y alegraré en él. Dame fuerzas para lo que venga y un corazón sensible a tu voz. Que sea de bendición para alguien hoy. Amén.','Señor, antes de comenzar, te entrego este día. Ordena mis prioridades, calma mis prisas y recuérdame que voy de tu mano. Contigo, todo estará bien. Amén.'],
+  'Antes de dormir':['Padre, al terminar este día te doy gracias por tu cuidado. Perdona lo que hice mal y guarda mi descanso. En paz me acostaré y dormiré, porque solo tú me haces vivir confiado. Buenas noches, Señor. Amén.','Señor, entrego en tus manos las preocupaciones de hoy y las de mañana. Cuida a los que amo mientras dormimos. Que tu paz llene esta casa y renueve mis fuerzas. Amén.','Dios mío, gracias por sostenerme hoy. Mientras descanso, vela por mí. Que despierte mañana con nuevas fuerzas para servirte. En tus brazos reposo tranquilo. Amén.'],
+  'Por los hijos':['Padre celestial, cuida a mis hijos por donde vayan. Guárdalos del mal, guía sus decisiones y haz que te conozcan y te amen. Que crezcan en sabiduría y en gracia delante de ti y de los hombres. En tus manos los pongo. Amén.','Señor, sé tú el pastor de mis hijos. Rodéalos de buenas amistades, dales un corazón obediente y sensible a tu voz. Donde yo no llego, llega tú. Gracias porque tú los amas aún más que yo. Amén.','Dios, bendice a mis hijos hoy. Sana sus heridas, fortalece su fe y llena su vida de propósito. Que sean luz en su generación. Confío en que cumplirás tu propósito en ellos. Amén.'],
+  'Sabiduría':['Señor, dame sabiduría para este momento. Enséñame a distinguir lo bueno de lo mejor y a caminar en tu voluntad. Que tu Palabra sea lámpara a mis pies. No me apoyaré en mi prudencia, sino en ti. Amén.','Padre, tú das sabiduría abundantemente a quien te la pide. Dame discernimiento para decidir con justicia y humildad. Guía mis pensamientos y mis palabras. Reconozco que te necesito. Amén.','Dios, en medio de mis dudas, aclara mi mente y ordena mis pasos. Ayúdame a esperar tu tiempo y a confiar cuando no entiendo. Tú harás recta mi vereda. Amén.'],
+  'En prueba':['Señor, en medio de esta prueba, sostén mi fe. No entiendo el porqué, pero confío en tu amor. Dame paciencia para esperar y fuerzas para no rendirme. Sé que todo lo encaminarás a bien. En ti descanso. Amén.','Padre, esta carga es pesada, pero no la llevo solo. Tú vas conmigo por el valle. Renueva mi esperanza y muéstrame tu mano. Después de la noche viene la mañana. Confío en ti. Amén.','Dios fiel, tú prometiste no dejarme ni desampararme. Aférrame a esa promesa hoy. Convierte esta prueba en testimonio y mi llanto en canción. Contigo venceré. Amén.'],
+  'Por la iglesia':['Señor, bendice a tu iglesia y a mi congregación. Une nuestros corazones en amor, unción y verdad. Levanta a los pastores y líderes, y que muchas almas te conozcan. Envía tu Espíritu como en el aposento alto. Amén.','Padre, derrama tu fuego sobre tu pueblo. Que haya avivamiento, sanidad y salvación. Protege a los hermanos, provee para las necesidades y haz de tu casa un lugar de tu presencia. Amén.','Dios, te pido por cada familia de la iglesia. Sana lo herido, restaura lo caído y multiplica lo bueno. Que seamos luz en nuestra ciudad y sal en la tierra. Para tu gloria, amén.']
+};
+const rooms = [
+  {live:true, title:'Estudio del libro de Romanos', host:'Pastor Elías · Monte Sion', listeners:48},
+  {live:true, title:'Oración de la madrugada', host:'Grupo de intercesión', listeners:23},
+  {live:false, title:'Jóvenes en fuego · Tema: Identidad', host:'Ministerio Juvenil', when:'Hoy 8:00 PM'},
+  {live:false, title:'Matrimonios según la Palabra', host:'Hna. Gabriela', when:'Mañana 7:00 PM'}
+];
+
+/* ============ ESTADO DERIVADO ============ */
+function dayIndex(){ const d=new Date(); return Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()))/86400000); }
+const dailyVerse = dailyVerses[dayIndex()%dailyVerses.length];
+const devotional = devotionals[dayIndex()%devotionals.length];
+let prayerTheme = 'Paz', prayerIdx = 0;
+
+function userInitial(){ return (((auth.user&&auth.user.name)||'A').trim().charAt(0).toUpperCase())||'A'; }
+
+/* ============ RENDER ============ */
+const screen = document.getElementById('screen');
+let tab = 'inicio';
+const svg = {
+  home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>', book:'<path d="M4 5a2 2 0 012-2h12v18H6a2 2 0 01-2-2z"/><path d="M18 3v18"/>',
+  heart:'<path d="M12 21s-7-4.5-9.5-8.5C.5 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5.5 3.5 3.5 7C19 16.5 12 21 12 21z"/>',
+  pray:'<path d="M12 3v7"/><path d="M9 6l3-3 3 3"/><path d="M6 21c0-4 2.5-7 6-7s6 3 6 7"/>', user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+  share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5L8.6 10.5"/>',
+  save:'<path d="M6 3h12v18l-6-4-6 4z"/>', chevron:'<path d="M9 6l6 6-6 6"/>', check:'<path d="M20 6L9 17l-5-5"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 21c0-3.5 3-5.5 7-5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M14 21c0-3 2-4.5 5-4.5"/>',
+  bell:'<path d="M18 8a6 6 0 10-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 21a2 2 0 01-3.4 0"/>', info:'<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/>',
+  gift:'<rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9M12 8v13"/>'
+};
+function ic(path,cls=''){return `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`}
+const tabs=[{id:'inicio',name:'Inicio',icon:svg.home},{id:'biblia',name:'Historias',icon:svg.book},{id:'aliento',name:'Aliento',icon:svg.heart},{id:'oracion',name:'Oración',icon:svg.pray},{id:'perfil',name:'Perfil',icon:svg.user}];
+function renderNav(){ document.getElementById('nav').innerHTML=tabs.map(t=>`<button class="${tab===t.id?'on':''}" onclick="go('${t.id}')">${ic(t.icon)}<span>${t.name}</span></button>`).join(''); }
+function go(t){ tab=t; renderNav(); document.getElementById('fab').style.display=(t==='inicio')?'grid':'none'; render(); screen.scrollTop=0;
+  clearInterval(feedPoll); feedPoll=null;
+  if(t==='inicio') feedPoll=setInterval(()=>loadFeed(true), 6000);
+}
+function render(){
+  ({inicio:renderInicio,biblia:renderBiblia,aliento:renderAliento,oracion:renderOracion,perfil:renderPerfil}[tab])();
+  screen.classList.remove('fade'); void screen.offsetWidth; screen.classList.add('fade');
+}
+
+/* --- INICIO --- */
+function isVerseSaved(ref){ return store.savedVerses.some(v=>v.r===ref); }
+function renderInicio(){
+  const saved = isVerseSaved(dailyVerse.ref);
+  let html=`<div class="verse-hero">
+    <div class="tag">✧ Versículo de hoy</div>
+    <p>“${dailyVerse.text}”</p><div class="ref">— ${dailyVerse.ref}</div>
+    <div class="verse-actions">
+      <button class="vbtn ${saved?'on':''}" onclick="saveVerse('${esc(dailyVerse.text)}','${dailyVerse.ref}',this)">${ic(svg.save)} ${saved?'Guardado':'Guardar'}</button>
+      <button class="vbtn" onclick="toast('Copia lista para compartir ✦')">${ic(svg.share)} Compartir</button>
+    </div></div>
+  <div class="quick">
+    <button onclick="go('aliento')"><div class="qi">☁️</div><span>Aliento</span></button>
+    <button onclick="go('oracion')"><div class="qi">🙏</div><span>Orar</span></button>
+    <button onclick="go('biblia')"><div class="qi">📖</div><span>Historias</span></button>
+    <button onclick="go('oracion')"><div class="qi">🎧</div><span>Estudios</span></button>
+  </div>
+  <div class="composer" onclick="openComposer()"><div class="avatar">${userInitial()}</div><div class="ph">Comparte una palabra, una invitación...</div><div class="plus">${ic(svg.book)}</div></div>
+  <div class="devo"><div class="dtop"><div class="lbl">✦ Palabra del día</div><h3>${devotional.title}</h3></div><p>${devotional.body}</p></div>
+  <div class="sec-head"><h2>Comunidad</h2><a onclick="loadFeed()">Actualizar</a></div>
+  <div id="feed-list">${feed.length?feed.map(renderPost).join(''):'<div class="empty"><span class="big">🕊️</span>Cargando la comunidad...</div>'}</div>`;
+  screen.innerHTML=html;
+  loadFeed(true);
+}
+async function loadFeed(silent){
+  try{
+    const r=await API('feed'); feed=r.posts;
+    if(tab==='inicio'){ const el=document.getElementById('feed-list'); if(el) el.innerHTML = feed.length?feed.map(renderPost).join(''):'<div class="empty"><span class="big">🕊️</span>Aún no hay publicaciones.<br><span style="font-size:12.5px">Sé el primero en compartir con el botón +</span></div>'; }
+  }catch(e){ if(!silent) toast(e.message); }
+}
+function renderPost(p){
+  const mine = p.mine;
+  const follow = p.following;
+  const myReact = p.myReact;
+  const counts = p.reacts || {victoria:0,viva:0,uncion:0,amen:0};
+  let h=`<div class="card"><div class="post-top"><div class="avatar" style="cursor:pointer" onclick="openProfile('${p.userId}')">${escHtml(p.avatar)}</div>
+    <div class="who" style="cursor:pointer" onclick="openProfile('${p.userId}')"><b>${escHtml(p.name)}</b><small>${escHtml(p.church||'')} · ${p.time||''}</small></div>
+    ${mine?`<span class="mine-tag">Tú</span>`:`<button class="follow-btn ${follow?'on':''}" onclick="toggleFollow('${p.userId}',this)">${follow?'Siguiendo':'Seguir'}</button>`}</div>`;
+  if(p.body) h+=`<div class="post-body">${escHtml(p.body)}</div>`;
+  if(p.verse) h+=`<div class="post-verse">“${escHtml(p.verse.text)}”<b>— ${escHtml(p.verse.ref)}</b></div>`;
+  if(p.event){
+    const going=store.going[p.id]; const n=(going?1:0);
+    h+=`<div class="event"><div class="event-band"><div class="event-date"><b>${escHtml(String(p.event.day))}</b><span>${escHtml(p.event.month||'')}</span></div>
+      <div class="ev-info"><b>${escHtml(p.event.title)}</b><br><small>${escHtml(p.event.sub)}</small></div></div>
+      <div class="event-foot"><div class="going"><div class="dots"><i>+</i><i>♥</i></div>${n} confirmados</div>
+      <button class="assist ${going?'on':''}" onclick="toggleGoing('${p.id}')">${going?ic(svg.check)+' Asistiré':'Asistir'}</button></div></div>`;
+  }
+  const total=(counts.victoria||0)+(counts.viva||0)+(counts.uncion||0)+(counts.amen||0);
+  h+=`<div class="reacts">`+reactionsDef.map(r=>`<button class="react ${myReact===r.id?'on':''}" onclick="react('${p.id}','${r.id}')"><span class="em">${r.em}</span>${r.name}<span class="n">${counts[r.id]||0}</span></button>`).join('')+`</div>`;
+  h+=`<div style="display:flex;gap:16px;align-items:center;padding:4px 16px 12px">`;
+  if(total>0) h+=`<span onclick="openReactors('${p.id}')" style="cursor:pointer;color:var(--miel);font-size:12px;font-weight:700">👀 ${total}</span>`;
+  h+=`<span onclick="openComments('${p.id}')" style="cursor:pointer;color:var(--caramelo);font-size:12.5px;font-weight:700">💬 Comentar${p.commentCount?' · '+p.commentCount:''}</span>`;
+  h+=`</div></div>`;
+  return h;
+}
+/* --- PERFILES + MENSAJE PRIVADO (servidor) --- */
+async function openProfile(userId){
+  if(auth.user && userId===auth.user.id){ closeSheet(); go('perfil'); return; }
+  document.getElementById('sheet-title').textContent='Perfil';
+  document.getElementById('sheet-content').innerHTML=`<div class="empty"><span class="big">🕊️</span>Cargando perfil...</div>`;
+  openSheet();
+  try{
+    const d = await API('profile?id='+encodeURIComponent(userId));
+    const u=d.user, follow=d.isFollowing;
+    document.getElementById('sheet-content').innerHTML=`
+      <div class="prof-hero" style="margin:6px 16px 12px"><div class="pav">${escHtml(u.avatar)}</div>
+        <h3>${escHtml(u.name)}</h3>
+        <div class="church">🕊️ ${escHtml(u.church||'Miembro de la comunidad')}</div>
+        <div class="prof-stats"><div><b>${d.posts.length}</b><small>Publicaciones</small></div><div style="cursor:pointer" onclick="openUserList('${u.id}','followers')"><b>${d.followers}</b><small>Seguidores</small></div><div style="cursor:pointer" onclick="openUserList('${u.id}','following')"><b>${d.following}</b><small>Siguiendo</small></div></div>
+        ${d.isMe?'':`<div style="display:flex;gap:10px;margin-top:16px;padding:0 6px">
+          <button id="prof-follow" class="edit-mini" style="flex:1;margin:0;${follow?'background:var(--miel);border-color:var(--miel)':''}" onclick="followFromProfile('${u.id}',this)">${follow?'✓ Siguiendo':'＋ Seguir'}</button>
+          <button class="edit-mini" style="flex:1;margin:0" onclick="openChat('${u.id}','${esc(u.name)}')">✉️ Mensaje</button>
+        </div>`}
+      </div>
+      ${u.bio?`<div class="pray-card" style="margin:0 16px 12px;padding:16px 18px"><div style="font-family:Georgia,serif;font-size:14.5px;line-height:1.6;color:var(--texto)">${escHtml(u.bio)}</div></div>`:''}
+      ${u.verse?`<div class="post-verse" style="margin:0 16px 14px">“${escHtml(u.verse)}”</div>`:''}
+      <div class="sec-head"><h2>Publicaciones</h2></div>
+      ${d.posts.length?d.posts.map(renderPost).join(''):'<div class="empty" style="padding:24px">Aún no ha publicado nada.</div>'}<div style="height:8px"></div>`;
+  }catch(e){ document.getElementById('sheet-content').innerHTML=`<div class="empty"><span class="big">😔</span>${escHtml(e.message)}</div>`; }
+}
+async function followFromProfile(userId,btn){
+  try{ const r=await API('follow','POST',{targetId:userId});
+    btn.textContent=r.following?'✓ Siguiendo':'＋ Seguir';
+    btn.style.background=r.following?'var(--miel)':''; btn.style.borderColor=r.following?'var(--miel)':'';
+    loadFeed(true);
+  }catch(e){ toast(e.message); }
+}
+let chatPoll=null, chatWith=null;
+async function openChat(userId,name){
+  chatWith=userId;
+  document.getElementById('sheet-title').textContent=name||'Mensaje';
+  document.getElementById('sheet-content').innerHTML=`
+    <div style="padding:0 20px 4px;color:var(--suave);font-size:12px">💬 Mensaje privado · sé de bendición 🙏</div>
+    <div id="chat-box" style="padding:10px 16px;display:flex;flex-direction:column;gap:8px;min-height:200px"><div class="empty" style="padding:20px">Cargando...</div></div>
+    <div style="display:flex;gap:8px;padding:8px 16px 4px;align-items:flex-end">
+      <input id="chat-input" placeholder="Escribe un mensaje..." style="flex:1;border:1px solid var(--linea);background:var(--blanco);border-radius:22px;padding:12px 16px;font-size:14.5px;outline:none" onkeydown="if(event.key==='Enter')sendDM('${userId}')">
+      <button onclick="sendDM('${userId}')" style="width:46px;height:46px;border-radius:50%;border:none;background:linear-gradient(145deg,var(--miel),var(--caramelo));color:#fff;cursor:pointer;flex:none">➤</button>
+    </div>`;
+  openSheet();
+  await loadChat(userId);
+  clearInterval(chatPoll); chatPoll=setInterval(()=>{ if(chatWith===userId && document.getElementById('chat-box')) loadChat(userId,true); else clearInterval(chatPoll); }, 2500);
+}
+async function loadChat(userId,keepScroll){
+  try{
+    const d=await API('dm?with='+encodeURIComponent(userId));
+    const box=document.getElementById('chat-box'); if(!box) return;
+    const atBottom = box.scrollHeight-box.scrollTop-box.clientHeight < 60;
+    box.innerHTML = d.messages.length ? d.messages.map(chatBubble).join('') : `<div class="empty" style="padding:26px"><span class="big">✉️</span>Aún no hay mensajes.<br><span style="font-size:12.5px">Escribe el primero.</span></div>`;
+    if(!keepScroll || atBottom) box.scrollTop=box.scrollHeight;
+  }catch(e){}
+}
+function chatBubble(m){
+  return m.me
+    ? `<div style="align-self:flex-end;max-width:78%;background:linear-gradient(135deg,var(--miel),var(--caramelo));color:#fff;padding:10px 14px;border-radius:16px 16px 4px 16px;font-size:14px;line-height:1.4">${escHtml(m.text)}</div>`
+    : `<div style="align-self:flex-start;max-width:78%;background:var(--blanco);border:1px solid var(--linea);color:var(--texto);padding:10px 14px;border-radius:16px 16px 16px 4px;font-size:14px;line-height:1.4">${escHtml(m.text)}</div>`;
+}
+async function sendDM(userId){
+  const inp=document.getElementById('chat-input'); const t=(inp.value||'').trim(); if(!t) return;
+  inp.value='';
+  try{ await API('dm','POST',{to:userId,text:t}); await loadChat(userId); }
+  catch(e){ toast(e.message); inp.value=t; }
+}
+async function toggleFollow(userId,btn){
+  try{ const r=await API('follow','POST',{targetId:userId});
+    if(btn){ btn.classList.toggle('on',r.following); btn.textContent=r.following?'Siguiendo':'Seguir'; }
+    toast(r.following?'Ahora sigues a esta persona ✦':'Dejaste de seguir');
+    loadFeed(true);
+  }catch(e){ toast(e.message); }
+}
+function toggleGoing(id){ store.going[id]=!store.going[id]; persist(); if(tab==='inicio')loadFeed(true); if(store.going[id]) toast('¡Confirmado! Te esperamos 🙏'); }
+async function react(id,rid){
+  try{ const r=await API('react','POST',{postId:id,reaction:rid});
+    const i=feed.findIndex(x=>x.id===id); if(i>=0) feed[i]=r.post;
+    if(tab==='inicio'){ const el=document.getElementById('feed-list'); if(el) el.innerHTML=feed.map(renderPost).join(''); }
+  }catch(e){ toast(e.message); }
+}
+function saveVerse(text,ref,btn){
+  if(isVerseSaved(ref)){ store.savedVerses=store.savedVerses.filter(v=>v.r!==ref); toast('Quitado de guardados'); }
+  else{ store.savedVerses.unshift({t:text,r:ref}); toast('Guardado en tus versículos ✦'); }
+  persist(); render();
+}
+
+/* --- COMPOSER (publicar de verdad) --- */
+let compType='mensaje';
+function openComposer(){
+  compType='mensaje';
+  document.getElementById('sheet-title').textContent='Publicar';
+  renderComposer();
+  openSheet();
+}
+function setCompType(t){ compType=t; renderComposer(true); }
+function renderComposer(keep){
+  const c=document.getElementById('sheet-content');
+  let fields='';
+  if(compType==='mensaje'){
+    fields=`<div class="field"><label>Tu mensaje</label><textarea id="c-body" placeholder="Comparte una palabra de aliento, un testimonio, una invitación...">${keep?getVal('c-body'):''}</textarea></div>`;
+  } else if(compType==='versiculo'){
+    fields=`<div class="field"><label>Versículo</label><textarea id="c-vtext" placeholder="Escribe el versículo...">${keep?getVal('c-vtext'):''}</textarea></div>
+      <div class="field"><label>Cita (referencia)</label><input id="c-vref" placeholder="Ej: Salmo 91:1" value="${keep?getVal('c-vref'):''}"></div>
+      <div class="field"><label>Comentario (opcional)</label><input id="c-body" placeholder="¿Por qué lo compartes?" value="${keep?getVal('c-body'):''}"></div>`;
+  } else {
+    fields=`<div class="field"><label>Nombre del culto o evento</label><input id="c-etitle" placeholder="Ej: Culto de Jóvenes" value="${keep?getVal('c-etitle'):''}"></div>
+      <div class="field"><label>Fecha</label><input id="c-edate" type="date"></div>
+      <div class="field"><label>Detalles (hora y lugar)</label><input id="c-esub" placeholder="Ej: Domingo 7:00 PM · Mi iglesia" value="${keep?getVal('c-esub'):''}"></div>
+      <div class="field"><label>Invitación (opcional)</label><textarea id="c-body" placeholder="Escribe una invitación para tus hermanos...">${keep?getVal('c-body'):''}</textarea></div>`;
+  }
+  c.innerHTML=`<div class="type-tabs">
+      <button class="${compType==='mensaje'?'on':''}" onclick="setCompType('mensaje')">✍️ Mensaje</button>
+      <button class="${compType==='versiculo'?'on':''}" onclick="setCompType('versiculo')">📖 Versículo</button>
+      <button class="${compType==='culto'?'on':''}" onclick="setCompType('culto')">📅 Culto</button>
+    </div>${fields}
+    <button class="primary-btn" onclick="publish()">Publicar</button>
+    <button class="primary-btn ghost" onclick="closeSheet()">Cancelar</button>
+    <div style="height:6px"></div>`;
+  if(compType==='culto' && !keep){ /* default date today */ const d=new Date().toISOString().slice(0,10); const el=document.getElementById('c-edate'); if(el) el.value=d; }
+}
+function getVal(id){ const e=document.getElementById(id); return e?e.value.replace(/"/g,'&quot;'):''; }
+async function publish(){
+  const months=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  const payload={ type:compType };
+  if(compType==='mensaje'){
+    const b=(document.getElementById('c-body').value||'').trim();
+    if(!b){ toast('Escribe un mensaje primero'); return; }
+    payload.body=b;
+  } else if(compType==='versiculo'){
+    const t=(document.getElementById('c-vtext').value||'').trim();
+    const r=(document.getElementById('c-vref').value||'').trim();
+    if(!t){ toast('Escribe el versículo'); return; }
+    payload.verse={text:t, ref:r||'—'};
+    const cm=(document.getElementById('c-body').value||'').trim(); if(cm) payload.body=cm;
+  } else {
+    const ti=(document.getElementById('c-etitle').value||'').trim();
+    const dt=document.getElementById('c-edate').value;
+    const sub=(document.getElementById('c-esub').value||'').trim();
+    if(!ti){ toast('Ponle nombre al culto'); return; }
+    let day='--',mon='';
+    if(dt){ const d=new Date(dt+'T00:00'); day=d.getDate(); mon=months[d.getMonth()]; }
+    payload.event={day:day, month:mon, title:ti, sub:sub||'Te esperamos'};
+    const b=(document.getElementById('c-body').value||'').trim(); if(b) payload.body=b;
+  }
+  try{ await API('post','POST',payload); closeSheet(); go('inicio'); toast('¡Publicado! 🙏 Tu palabra ya está en la comunidad'); }
+  catch(e){ toast(e.message); }
+}
+
+/* --- BIBLIA --- */
+function renderBiblia(){
+  let html=`<div class="title">Historias Bíblicas</div>
+  <div class="subtitle">${stories.length} relatos para leer completos. Toca una historia y disfruta la Palabra.</div>`;
+  storyCats.forEach(cat=>{
+    const list=stories.filter(s=>s.cat===cat.id);
+    if(!list.length) return;
+    html+=`<div class="sec-head"><h2>${cat.name}</h2><span style="color:var(--suave);font-size:12px;font-weight:700">${list.length}</span></div>
+    <div class="card">${list.map(s=>`<div class="story" onclick="openStory('${s.id}')"><div class="story-ic">${s.em}</div><div class="st"><b>${s.name}</b><small>${s.sub} · ${s.text.length} partes</small></div>${ic(svg.chevron,'chev')}</div>`).join('')}</div>`;
+  });
+  html+=`<div style="text-align:center;color:var(--suave);font-size:12px;padding:14px 30px 8px">Más historias se añadirán cada semana ✦</div>`;
+  screen.innerHTML=html;
+}
+function openStory(id,full){
+  const s=stories.find(x=>x.id===id);
+  const saved=store.savedStories.includes(id);
+  const preview=2; // párrafos visibles antes de "Seguir leyendo"
+  const showAll = full || s.text.length<=preview;
+  const shown = showAll ? s.text : s.text.slice(0,preview);
+  document.getElementById('sheet-title').textContent=s.name;
+  document.getElementById('sheet-content').innerHTML=`<div style="padding:0 24px 8px;color:var(--miel);font-weight:700;font-size:13px">${s.sub}</div>
+    <div style="text-align:center;font-size:46px;margin:6px 0 10px">${s.em}</div>
+    <div class="reader" id="story-reader">${shown.map(p=>`<p>${p}</p>`).join('')}</div>
+    ${showAll ? `<button class="primary-btn ${saved?'ghost':''}" onclick="toggleSaveStory('${id}')">${saved?'✓ Guardada — quitar':'Guardar historia'}</button>`
+              : `<button class="primary-btn" onclick="openStory('${id}',true)">Seguir leyendo ↓</button>`}`;
+  if(!showAll) document.querySelector('#sheet .sheet-body').scrollTop=0;
+  openSheet();
+}
+function toggleSaveStory(id){
+  if(store.savedStories.includes(id)){ store.savedStories=store.savedStories.filter(x=>x!==id); toast('Quitada de guardadas'); }
+  else{ store.savedStories.unshift(id); toast('Historia guardada ✦'); }
+  persist(); openStory(id);
+}
+
+/* --- ALIENTO --- */
+function renderAliento(){
+  screen.innerHTML=`<div class="title">¿Cómo te sientes hoy?</div>
+  <div class="subtitle">Dios tiene una palabra para cada momento. Elige lo que sientes y recibe versículos que te acompañen.</div>
+  <div class="emos">${emotions.map(e=>`<button class="emo" style="background:${e.color}" onclick="openEmotion('${e.id}')"><span class="em">${e.em}</span><div><b>${e.name}</b><small>${e.sub}</small></div></button>`).join('')}</div>
+  <div class="sec-head"><h2>Otros temas</h2></div>
+  <div class="card">
+    <div class="story" onclick="openTopic('mandamientos')"><div class="story-ic">📜</div><div class="st"><b>Los 10 Mandamientos</b><small>La ley de amor de Dios</small></div>${ic(svg.chevron,'chev')}</div>
+    <div class="story" onclick="openTopic('projimo')"><div class="story-ic">❤️</div><div class="st"><b>Amar al prójimo</b><small>Relaciones que honran a Dios</small></div>${ic(svg.chevron,'chev')}</div>
+    <div class="story" onclick="openTopic('buencristiano')"><div class="story-ic">🌟</div><div class="st"><b>Cómo ser buen cristiano</b><small>Vive tu fe cada día</small></div>${ic(svg.chevron,'chev')}</div>
+  </div>`;
+}
+function verseItemHtml(t,r){
+  const saved=isVerseSaved(r);
+  return `<div class="verse-item"><button class="vi-save ${saved?'on':''}" onclick="saveVerse('${esc(t)}','${esc(r)}',this);refreshSheetSaved()">${ic(svg.save)}</button><p>“${t}”</p><b>— ${r}</b></div>`;
+}
+function openEmotion(id){
+  const e=emotions.find(x=>x.id===id); const vs=emotionVerses[id]||[];
+  document.getElementById('sheet-title').textContent=e.name;
+  document.getElementById('sheet-content').innerHTML=`<div style="text-align:center;font-size:44px;margin:2px 0 4px">${e.em}</div>
+    <div style="text-align:center;color:var(--suave);font-size:13.5px;padding:0 30px 12px">${e.sub} · Deja que estas palabras te hablen.</div>
+    <div class="verse-list">${vs.map(v=>verseItemHtml(v.t,v.r)).join('')}</div>`;
+  sheetSavedContext={type:'emotion',id};
+  openSheet();
+}
+let sheetSavedContext=null;
+function refreshSheetSaved(){ if(sheetSavedContext&&sheetSavedContext.type==='emotion') openEmotion(sheetSavedContext.id); }
+function openTopic(id){
+  const t=topics[id];
+  document.getElementById('sheet-title').textContent=t.title;
+  document.getElementById('sheet-content').innerHTML=`<div style="text-align:center;font-size:44px;margin:2px 0 6px">${t.em}</div>
+    <div style="text-align:center;color:var(--miel);font-weight:700;font-size:13px;padding-bottom:8px">${t.ref}</div>
+    <div class="verse-list">${t.items.map((v,i)=>`<div class="verse-item"><p><b style="color:var(--miel);font-family:Georgia">${i+1}.</b> ${v}</p></div>`).join('')}</div>`;
+  sheetSavedContext=null; openSheet();
+}
+
+/* --- ORACIÓN --- */
+function renderOracion(){
+  const cur=prayers[prayerTheme][prayerIdx%prayers[prayerTheme].length];
+  const savedP=store.savedPrayers.some(x=>x.theme===prayerTheme&&x.text===cur);
+  screen.innerHTML=`<div class="title">Oración</div>
+  <div class="subtitle">Recibe una oración guiada para este momento. Elige un tema y deja que las palabras te den paz.</div>
+  <div class="chips">${prayerThemes.map(t=>`<button class="pchip ${prayerTheme===t?'on':''}" onclick="setTheme('${t}')">${t}</button>`).join('')}</div>
+  <div class="pray-card"><div class="lbl">✦ Oración · ${prayerTheme}</div><div class="pray-text" id="prayText">${cur}</div></div>
+  <button class="gen-btn" onclick="regenPrayer()">${ic(svg.pray)} Otra oración</button>
+  <div style="display:flex;gap:8px;padding:8px 16px 0">
+    <button class="vbtn ${savedP?'on':''}" style="flex:1;justify-content:center;${savedP?'':'background:var(--blanco);color:var(--caramelo);border:1px solid var(--linea)'}" onclick="savePrayer()">${ic(svg.save)} ${savedP?'Guardada':'Guardar'}</button>
+    <button class="vbtn" style="flex:1;justify-content:center;background:var(--blanco);color:var(--caramelo);border:1px solid var(--linea)" onclick="toast('Copia lista para compartir ✦')">${ic(svg.share)} Compartir</button>
+  </div>
+  <div class="sec-head"><h2>Estudios bíblicos en vivo</h2><a onclick="loadRooms()">Actualizar</a></div>
+  <div class="subtitle" style="padding-top:0">Únete a un estudio en vivo, comenta y aprende junto a otros hermanos conectados.</div>
+  <button class="gen-btn" style="background:linear-gradient(135deg,#5B8C5A,#3E6B3D)" onclick="startStudy()">🎙️ Iniciar un estudio</button>
+  <div class="card" id="rooms-list"><div class="empty" style="padding:22px">Cargando estudios...</div></div>`;
+  loadRooms();
+}
+async function loadRooms(){
+  const el=document.getElementById('rooms-list'); if(!el) return;
+  try{
+    const d=await API('rooms');
+    el.innerHTML = d.rooms.length ? d.rooms.map(renderRoom).join('')
+      : '<div class="empty" style="padding:24px"><span class="big">🎧</span>No hay estudios en vivo ahora.<br><span style="font-size:12.5px">¡Inicia uno con el botón verde y sé el primero!</span></div>';
+  }catch(e){ el.innerHTML='<div class="empty" style="padding:20px">No se pudo cargar.</div>'; }
+}
+function renderRoom(r){
+  return `<div class="room" onclick="openRoom('${r.id}')">
+    <div class="live"></div>
+    <div class="ri"><b>${escHtml(r.title)} ${r.mine?'<span style="color:var(--miel);font-size:11px">· tuyo</span>':''}</b><small>${escHtml(r.hostName)} · anfitrión</small></div>
+    <span class="listeners">${ic(svg.users)} ${r.listeners}</span>
+    <button class="join" onclick="event.stopPropagation();openRoom('${r.id}')">Entrar</button></div>`;
+}
+function startStudy(){
+  document.getElementById('sheet-title').textContent='Iniciar un estudio';
+  document.getElementById('sheet-content').innerHTML=`
+    <div style="padding:0 24px 6px;color:var(--suave);font-size:13.5px;line-height:1.5">Abre una sala en vivo para que otros hermanos entren a estudiar la Palabra contigo. 🎙️</div>
+    <div class="field"><label>Tema del estudio</label><input id="s-title" placeholder="Ej: El poder de la oración"></div>
+    <div class="field"><label>Pasaje o libro (opcional)</label><input id="s-ref" placeholder="Ej: Santiago 5"></div>
+    <button class="primary-btn" onclick="createStudy()">Comenzar en vivo</button>
+    <button class="primary-btn ghost" onclick="closeSheet()">Cancelar</button>`;
+  openSheet();
+}
+async function createStudy(){
+  if(inRoom){ toast('Sal del estudio actual antes de crear otro 🙏'); return; }
+  const t=(document.getElementById('s-title').value||'').trim();
+  if(!t){ toast('Ponle un tema al estudio'); return; }
+  const ref=(document.getElementById('s-ref').value||'').trim();
+  try{ const r=await API('room-create','POST',{title:t,ref}); toast('¡Estás en vivo! 🎙️'); openRoom(r.id); }
+  catch(e){ toast(e.message); }
+}
+let roomId=null, roomPoll=null;
+async function openRoom(id){
+  if(inRoom && roomId && roomId!==id){ toast('Ya estás en un estudio. Sal primero 🙏'); maximizeRoom(); return; }
+  roomId=id;
+  document.getElementById('sheet-title').textContent='Estudio en vivo';
+  document.getElementById('sheet-content').innerHTML='<div class="empty"><span class="big">🎙️</span>Entrando a la sala...</div>';
+  openSheet();
+  try{ await API('room-join','POST',{id}); }catch(e){}
+  let r;
+  try{ r=await API('room?id='+encodeURIComponent(id)); }catch(e){ toast(e.message||'La sala terminó'); closeSheet(); roomId=null; renderOracion(); return; }
+  roomState=r; roomIsHost=!!r.isHost; inRoom=true; hideRoomBar(); buildRoomShell(r); startVoice(id);
+  clearInterval(roomPoll); roomPoll=setInterval(()=>{ if(roomId===id && document.getElementById('room-chat')) updateRoom(); else clearInterval(roomPoll); }, 2500);
+}
+function buildRoomShell(r){
+  document.getElementById('sheet-content').innerHTML=`
+    <div style="text-align:center;padding:4px 24px 2px">
+      <div style="display:inline-flex;align-items:center;gap:7px;background:#F5DAD5;color:#B24A3A;font-weight:800;font-size:12px;padding:5px 12px;border-radius:20px"><span class="live"></span> EN VIVO</div>
+      <h3 style="font-family:Georgia,serif;font-size:20px;color:var(--cafe);margin-top:12px">${escHtml(r.title)}</h3>
+      ${r.ref?`<div style="color:var(--miel);font-weight:700;font-size:13px;margin-top:2px">${escHtml(r.ref)}</div>`:''}
+      <div style="color:var(--suave);font-size:12.5px;margin-top:4px">${escHtml(r.hostName)} · anfitrión · <span id="room-count">${r.listeners}</span> en la sala</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:14px 20px 6px" id="room-parts">${partsHtml(r.participants)}</div>
+    <div style="padding:2px 20px 6px;text-align:center;color:var(--suave);font-size:12px;line-height:1.5">💬 Estudio en vivo. Comparte y comenta la Palabra con la sala:</div>
+    <div id="room-chat" style="padding:6px 16px;min-height:120px;max-height:220px;overflow-y:auto">${chatRoomHtml(r.chat)}</div>
+    <div style="display:flex;gap:8px;padding:8px 16px 4px;align-items:flex-end">
+      <input id="room-input" placeholder="Escribe algo a la sala..." style="flex:1;border:1px solid var(--linea);background:var(--blanco);border-radius:22px;padding:12px 16px;font-size:14.5px;outline:none" onkeydown="if(event.key==='Enter')roomSay()">
+      <button onclick="roomSay()" style="width:46px;height:46px;border-radius:50%;border:none;background:linear-gradient(145deg,var(--miel),var(--caramelo));color:#fff;cursor:pointer;flex:none">➤</button>
+    </div>
+    <div id="room-controls">${roomControlsHtml(r)}</div>`;
+  const box=document.getElementById('room-chat'); if(box) box.scrollTop=box.scrollHeight;
+}
+function roomControlsHtml(r){
+  let h='';
+  if(r.myRole==='host' && r.hands && r.hands.length){
+    h+=`<div style="margin:4px 16px 10px;padding:12px 14px;background:var(--crema2);border-radius:16px;border:1px solid var(--linea)">
+      <div style="font-size:12px;color:var(--miel);font-weight:800;margin-bottom:8px">✋ Piden la palabra</div>`+
+      r.hands.map(hd=>`<div style="display:flex;align-items:center;gap:10px;padding:4px 0"><div class="avatar" style="width:32px;height:32px;font-size:13px">${escHtml((hd.name||'?').charAt(0).toUpperCase())}</div><span style="flex:1;font-size:13.5px;color:var(--cafe);font-weight:600">${escHtml(hd.name)}</span><button class="assist" onclick="grantWord('${r.id}','${hd.id}')">Dar la palabra</button></div>`).join('')+
+      `</div>`;
+  }
+  // El anfitrión controla a quién tiene la palabra: puede quitársela
+  if(r.myRole==='host'){
+    const speakers=(r.participants||[]).filter(p=>p.speaker && !p.host);
+    if(speakers.length){
+      h+=`<div style="margin:4px 16px 10px;padding:12px 14px;background:var(--crema2);border-radius:16px;border:1px solid var(--linea)">
+        <div style="font-size:12px;color:var(--miel);font-weight:800;margin-bottom:8px">🎙️ Tienen la palabra</div>`+
+        speakers.map(sp=>`<div style="display:flex;align-items:center;gap:10px;padding:4px 0"><div class="avatar" style="width:32px;height:32px;font-size:13px">${escHtml((sp.name||'?').charAt(0).toUpperCase())}</div><span style="flex:1;font-size:13.5px;color:var(--cafe);font-weight:600">${escHtml(sp.name)}</span><button class="assist" style="background:#B24A3A" onclick="muteUser('${r.id}','${sp.id}')">Quitar / silenciar</button></div>`).join('')+
+        `</div>`;
+    }
+  }
+  let action='';
+  if(r.myRole==='host'||r.myRole==='speaker'){
+    const micOn = localStream && !micMuted;
+    action=`<button id="mic-btn" class="primary-btn ${micOn?'':'ghost'}" style="margin:0;flex:1;${micOn?'background:#B24A3A':''}" onclick="requestMic('${r.id}')">${micOn?'🔴 Silenciar micrófono':'🎤 Activar micrófono'}</button>`;
+  }else{
+    action=`<button class="primary-btn ${r.iRaised?'':'ghost'}" style="margin:0;flex:1" onclick="raiseHand('${r.id}')">${r.iRaised?'✋ Bajar la mano':'✋ Pedir la palabra'}</button>`;
+  }
+  h+=`<div style="display:flex;gap:10px;padding:8px 22px 4px">${action}
+      <button class="primary-btn" style="margin:0;flex:1;background:#8A5A2B" onclick="leaveRoom('${r.id}',${r.myRole==='host'})">${r.myRole==='host'?'Finalizar':'Salir'}</button></div>
+    <button class="primary-btn ghost" style="margin:8px 22px 0;width:calc(100% - 44px)" onclick="minimizeRoom()">⌄ Minimizar y seguir escuchando</button>
+    <div style="padding:8px 22px 6px;text-align:center;color:var(--suave);font-size:11.5px">${r.myRole==='host'?'Eres el anfitrión. Da la palabra a quien la pida. ':(r.myRole==='speaker'?'Tienes la palabra, ya te escuchan. ':'Pide la palabra y el anfitrión te la dará. ')}🎙️ Voz en vivo activa.</div>`;
+  return h;
+}
+async function raiseHand(id){ try{ await API('room-hand','POST',{id}); updateRoom(); }catch(e){ toast(e.message); } }
+async function muteUser(id,userId){ try{ await API('room-mute','POST',{id,userId}); toast('Le quitaste la palabra 🔇'); updateRoom(); }catch(e){ toast(e.message); } }
+async function grantWord(id,userId){ try{ await API('room-grant','POST',{id,userId}); toast('Diste la palabra 🎤'); updateRoom(); }catch(e){ toast(e.message); } }
+function partsHtml(parts){
+  return parts.map(pt=>`<div style="width:66px;text-align:center;cursor:pointer" onclick="${pt.you?'':`closeSheet();openProfile('${pt.id}')`}">
+    <div style="width:54px;height:54px;border-radius:50%;margin:0 auto 5px;display:grid;place-items:center;font-weight:800;color:#fff;font-size:18px;background:linear-gradient(145deg,${pt.host?'var(--oro),var(--miel)':'var(--miel),var(--caramelo)'});${pt.you?'box-shadow:0 0 0 3px var(--vainilla)':''}">${escHtml((pt.name||'?').charAt(0).toUpperCase())}</div>
+    <div style="font-size:10.5px;color:var(--cafe);font-weight:600;line-height:1.2">${escHtml(pt.name)}${pt.host?'<br><span style="color:var(--miel)">🎙️ anfitrión</span>':(pt.speaker?'<br><span style="color:var(--miel)">🎙️ con voz</span>':(pt.you?'':'<br><span style="color:var(--suave);font-size:9.5px">ver perfil</span>'))}</div>
+  </div>`).join('');
+}
+function chatRoomHtml(chat){
+  if(!chat||!chat.length) return '<div class="empty" style="padding:14px">Aún nadie ha escrito. ¡Saluda a la sala! 🙏</div>';
+  return chat.map(m=>{
+    if(m.system) return `<div style="text-align:center;color:var(--suave);font-size:12px;margin:6px 0;font-style:italic">${escHtml(m.text)}</div>`;
+    return `<div style="margin-bottom:9px"><b style="color:${m.host?'var(--miel)':'var(--caramelo)'};font-size:12.5px">${escHtml(m.name)}${m.host?' 🎙️':''}</b><div style="font-size:14px;color:var(--texto);line-height:1.4">${escHtml(m.text)}</div></div>`;
+  }).join('');
+}
+async function updateRoom(){
+  try{
+    const r=await API('room?id='+encodeURIComponent(roomId));
+    roomState=r; applyMicState();
+    const c=document.getElementById('room-count'); if(c) c.textContent=r.listeners;
+    const pp=document.getElementById('room-parts'); if(pp) pp.innerHTML=partsHtml(r.participants);
+    const ctrl=document.getElementById('room-controls'); if(ctrl && document.activeElement.id!=='room-input') ctrl.innerHTML=roomControlsHtml(r);
+    const box=document.getElementById('room-chat'); if(box){ const atBottom=box.scrollHeight-box.scrollTop-box.clientHeight<60; box.innerHTML=chatRoomHtml(r.chat); if(atBottom) box.scrollTop=box.scrollHeight; }
+  }catch(e){
+    clearInterval(roomPoll);
+    if(roomId){ roomId=null; toast('El estudio terminó 🙏'); closeSheet(); if(tab==='oracion') renderOracion(); }
+  }
+}
+async function roomSay(){
+  const inp=document.getElementById('room-input'); const t=(inp.value||'').trim(); if(!t) return; inp.value='';
+  try{ await API('room-say','POST',{id:roomId,text:t}); await updateRoom(); }catch(e){ toast(e.message); }
+}
+async function leaveRoom(id,isHost){
+  inRoom=false; roomIsHost=false; clearInterval(roomPoll); roomId=null; roomState=null;
+  stopVoice(); callEnd(); hideRoomBar();
+  try{ await API('room-leave','POST',{id}); }catch(e){}
+  toast(isHost?'Estudio finalizado 🙏':'Saliste de la sala');
+  document.getElementById('sheet').classList.remove('open');
+  if(tab==='oracion') renderOracion();
+}
+function setTheme(t){ prayerTheme=t; prayerIdx=0; renderOracion(); }
+function regenPrayer(){ prayerIdx++; renderOracion(); toast('Nueva oración ✦'); }
+function savePrayer(){
+  const cur=prayers[prayerTheme][prayerIdx%prayers[prayerTheme].length];
+  const exists=store.savedPrayers.some(x=>x.theme===prayerTheme&&x.text===cur);
+  if(exists){ store.savedPrayers=store.savedPrayers.filter(x=>!(x.theme===prayerTheme&&x.text===cur)); toast('Quitada de guardadas'); }
+  else{ store.savedPrayers.unshift({theme:prayerTheme,text:cur}); toast('Oración guardada ✦'); }
+  persist(); renderOracion();
+}
+
+/* --- PERFIL --- */
+function renderPerfil(){
+  const u=auth.user||{name:'Hermano(a)',church:'',avatar:'A'};
+  screen.innerHTML=`<div class="prof-hero"><div class="pav">${escHtml(u.avatar||userInitial())}</div><h3>${escHtml(u.name)}</h3>
+    <div class="church">🕊️ ${escHtml(u.church||'Aún sin congregación')}</div>
+    <div class="prof-stats"><div><b id="st-posts">·</b><small>Publicaciones</small></div><div style="cursor:pointer" onclick="openUserList(auth.user.id,'followers')"><b id="st-followers">·</b><small>Seguidores</small></div><div style="cursor:pointer" onclick="openUserList(auth.user.id,'following')"><b id="st-following">·</b><small>Siguiendo</small></div></div>
+    <button class="edit-mini" onclick="editProfile()">Editar mi perfil</button></div>
+  <div class="card">
+    <div class="list-row" onclick="openMyPosts()"><div class="lr-ic" style="font-size:18px">✍️</div><span>Mis publicaciones</span>${ic(svg.chevron,'chev')}</div>
+    ${row('savedVerses','📖','Versículos guardados',store.savedVerses.length)}
+    ${row('savedPrayers','🙏','Oraciones guardadas',store.savedPrayers.length)}
+    ${row('savedStories','⭐','Historias guardadas',store.savedStories.length)}
+  </div>
+  <div class="card">
+    <div class="list-row"><div class="lr-ic">🌙</div><span>Modo oscuro</span><div class="switch ${store.dark?'on':''}" onclick="toggleDark()"><i></i></div></div>
+    <div class="list-row" onclick="toast('Comparte el link de tu servidor para que entren 🙏')"><div class="lr-ic">${ic(svg.gift)}</div><span>Invitar a un hermano</span>${ic(svg.chevron,'chev')}</div>
+    <div class="list-row" onclick="aboutApp()"><div class="lr-ic">${ic(svg.info)}</div><span>Acerca de Aposento Alto</span>${ic(svg.chevron,'chev')}</div>
+    <div class="list-row" onclick="logout()"><div class="lr-ic">🚪</div><span style="color:#B24A3A">Cerrar sesión</span></div>
+  </div>
+  <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px">Aposento Alto · Comunidad Cristiana<br>Hecho con fe ✦ v3.0</div>`;
+  if(auth.user) loadMyStats();
+}
+async function loadMyStats(){
+  try{ const d=await API('profile?id='+encodeURIComponent(auth.user.id));
+    const a=document.getElementById('st-posts'); if(a) a.textContent=d.posts.length;
+    const b=document.getElementById('st-followers'); if(b) b.textContent=d.followers;
+    const c=document.getElementById('st-following'); if(c) c.textContent=d.following;
+  }catch(e){}
+}
+async function openMyPosts(){
+  document.getElementById('sheet-title').textContent='Mis publicaciones';
+  document.getElementById('sheet-content').innerHTML='<div class="empty"><span class="big">✍️</span>Cargando...</div>';
+  openSheet();
+  try{ const d=await API('profile?id='+encodeURIComponent(auth.user.id));
+    document.getElementById('sheet-content').innerHTML = d.posts.length ? d.posts.map(renderPost).join('')+'<div style="height:10px"></div>' : emptyMsg('✍️','Aún no has publicado nada.','Usa el botón + para compartir con la comunidad.');
+  }catch(e){ document.getElementById('sheet-content').innerHTML=emptyMsg('😔',e.message,''); }
+}
+function row(key,em,label,count){
+  return `<div class="list-row" onclick="openSaved('${key}')"><div class="lr-ic" style="font-size:18px">${em}</div><span>${label}</span><span class="cnt">${count}</span>${ic(svg.chevron,'chev')}</div>`;
+}
+function openSaved(key){
+  let title,body='';
+  if(key==='savedVerses'){ title='Versículos guardados';
+    body = store.savedVerses.length? `<div class="verse-list">${store.savedVerses.map((v,i)=>`<div class="verse-item"><p>“${escHtml(v.t)}”</p><b>— ${escHtml(v.r)}</b><span class="del" onclick="delItem('savedVerses',${i})">Quitar</span></div>`).join('')}</div>` : emptyMsg('📖','Aún no has guardado versículos.','Toca "Guardar" en el versículo del día o en la sección Aliento.');
+  } else if(key==='savedPrayers'){ title='Oraciones guardadas';
+    body = store.savedPrayers.length? `<div class="verse-list">${store.savedPrayers.map((p,i)=>`<div class="verse-item"><b style="margin:0 0 8px">${p.theme}</b><p>${escHtml(p.text)}</p><span class="del" onclick="delItem('savedPrayers',${i})">Quitar</span></div>`).join('')}</div>` : emptyMsg('🙏','Aún no has guardado oraciones.','Ve a Oración y toca "Guardar".');
+  } else if(key==='savedStories'){ title='Historias guardadas';
+    body = store.savedStories.length? `<div class="card" style="margin:8px 16px">${store.savedStories.map(id=>{const s=stories.find(x=>x.id===id);return s?`<div class="story" onclick="closeSheet();setTimeout(()=>openStory('${id}'),200)"><div class="story-ic">${s.em}</div><div class="st"><b>${s.name}</b><small>${s.sub}</small></div>${ic(svg.chevron,'chev')}</div>`:'';}).join('')}</div>` : emptyMsg('⭐','Aún no has guardado historias.','Abre una historia y toca "Guardar historia".');
+  }
+  document.getElementById('sheet-title').textContent=title;
+  document.getElementById('sheet-content').innerHTML=body;
+  sheetSavedContext=null; openSheet();
+}
+function delItem(key,i){ store[key].splice(i,1); persist(); render(); openSaved(key); toast('Eliminado'); }
+function emptyMsg(big,a,b){ return `<div class="empty"><span class="big">${big}</span>${a}<br><span style="font-size:12.5px">${b}</span></div>`; }
+function aboutApp(){
+  document.getElementById('sheet-title').textContent='Acerca de';
+  document.getElementById('sheet-content').innerHTML=`<div style="text-align:center;font-size:44px;padding:6px">🕊️</div>
+    <div class="reader" style="font-family:'Segoe UI',sans-serif;font-size:15px">
+    <p><b>Aposento Alto</b> es una comunidad cristiana pentecostal donde solo se habla de Dios. Un lugar de aliento, versículos, historias bíblicas, oración y comunión.</p>
+    <p>El nombre recuerda el aposento alto de Hechos 2, donde los discípulos recibieron el Espíritu Santo el día de Pentecostés.</p>
+    <p style="color:var(--miel);font-weight:700">"Donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos." — Mateo 18:20</p></div>
+    <button class="primary-btn ghost" onclick="closeSheet()">Cerrar</button>`;
+  openSheet();
+}
+function attr(s){ return String(s||'').replace(/"/g,'&quot;'); }
+function editProfile(){
+  const u=auth.user||{};
+  document.getElementById('sheet-title').textContent='Mi perfil';
+  document.getElementById('sheet-content').innerHTML=`
+    <div class="field"><label>Tu nombre (cuenta)</label><input value="${attr(u.name)}" disabled style="opacity:.6"></div>
+    <div class="field"><label>Tu iglesia / congregación</label><input id="p-church" placeholder="Ej: Iglesia Pentecostal Monte Sion" value="${attr(u.church)}"></div>
+    <div class="field"><label>Sobre ti</label><textarea id="p-bio" placeholder="Una frase que te describa como cristiano(a)...">${escHtml(u.bio||'')}</textarea></div>
+    <div class="field"><label>Tu versículo favorito</label><input id="p-verse" placeholder="Ej: Salmo 23:1" value="${attr(u.verse)}"></div>
+    <button class="primary-btn" onclick="saveProfile()">Guardar</button>
+    <button class="primary-btn ghost" onclick="closeSheet()">Cancelar</button>`;
+  openSheet();
+}
+async function saveProfile(){
+  try{
+    const d=await API('profile-update','POST',{ church:(document.getElementById('p-church').value||'').trim(), bio:(document.getElementById('p-bio').value||'').trim(), verse:(document.getElementById('p-verse').value||'').trim() });
+    auth.user=d.user; closeSheet(); render(); toast('Perfil actualizado ✦');
+  }catch(e){ toast(e.message); }
+}
+
+/* --- Cuenta: iniciar sesión / crear cuenta --- */
+let authMode='login';
+function showAuth(){
+  clearInterval(feedPoll); feedPoll=null;
+  document.getElementById('nav').style.display='none';
+  document.getElementById('fab').style.display='none';
+  screen.innerHTML=`
+    <div style="padding:42px 26px 6px;text-align:center">
+      <div class="logo" style="width:66px;height:66px;border-radius:22px;margin:0 auto 16px"><svg viewBox="0 0 24 24" fill="none" style="width:38px;height:38px"><path d="M12 2c-1 3-4 5-4 9a4 4 0 108 0c0-4-3-6-4-9z" fill="#FBEFDD"/><circle cx="12" cy="11.5" r="1.6" fill="#C57938"/></svg></div>
+      <h1 style="font-family:Georgia,serif;font-size:28px;color:var(--cafe)">Aposento Alto</h1>
+      <div style="color:var(--suave);font-size:13px;margin-top:4px;letter-spacing:1px">COMUNIDAD CRISTIANA</div>
+    </div>
+    <div class="type-tabs" style="padding:16px 22px 4px">
+      <button class="${authMode==='login'?'on':''}" onclick="setAuthMode('login')">Iniciar sesión</button>
+      <button class="${authMode==='register'?'on':''}" onclick="setAuthMode('register')">Crear cuenta</button>
+    </div>
+    <div class="field" style="margin-top:6px"><label>Tu nombre</label><input id="a-name" placeholder="Ej: María Pérez" autocomplete="off"></div>
+    ${authMode==='register'?`<div class="field"><label>Tu iglesia (opcional)</label><input id="a-church" placeholder="Ej: Iglesia Pentecostal Monte Sion"></div>`:''}
+    <div class="field"><label>Contraseña</label><input id="a-pass" type="password" placeholder="Mínimo 4 caracteres" onkeydown="if(event.key==='Enter')submitAuth()"></div>
+    <button class="primary-btn" onclick="submitAuth()">${authMode==='login'?'Entrar':'Crear cuenta y entrar'}</button>
+    <div style="text-align:center;color:var(--suave);font-size:12px;padding:16px 30px;line-height:1.5">Al entrar aceptas mantener este espacio solo para hablar de Dios, con respeto y amor. 🕊️</div>`;
+}
+function setAuthMode(m){ authMode=m; showAuth(); }
+async function submitAuth(){
+  const name=(document.getElementById('a-name').value||'').trim();
+  const pass=(document.getElementById('a-pass').value||'').trim();
+  const churchEl=document.getElementById('a-church');
+  const church=churchEl?(churchEl.value||'').trim():'';
+  if(name.length<2){ toast('Escribe tu nombre'); return; }
+  if(pass.length<4){ toast('La contraseña debe tener al menos 4 caracteres'); return; }
+  try{
+    const d=await API(authMode==='register'?'register':'login','POST',{name,church,pass});
+    setToken(d.token); auth.user=d.user; enterApp(); toast('¡Bienvenido(a), '+d.user.name+'! 🙏');
+  }catch(e){ toast(e.message); }
+}
+function enterApp(){
+  document.getElementById('nav').style.display='flex';
+  renderNav(); go('inicio');
+  pollBadges(); clearInterval(badgePoll); badgePoll=setInterval(pollBadges, 12000);
+}
+function logout(){ setToken(''); auth.user=null; clearInterval(feedPoll); feedPoll=null; clearInterval(badgePoll); badgePoll=null; closeSheet(); showAuth(); toast('Sesión cerrada'); }
+
+/* --- Notificaciones, bandeja de mensajes, listas de personas --- */
+let badgePoll=null;
+function setBadge(id,n){ const b=document.getElementById(id); if(!b) return; if(n>0){ b.textContent=n>9?'9+':n; b.style.display='grid'; } else b.style.display='none'; }
+async function pollBadges(){
+  if(!auth.user) return;
+  try{ const d=await API('notifs'); setBadge('badge-notifs', d.unread); setBadge('badge-inbox', d.unreadDm); }catch(e){}
+}
+function userRow(u, trailing){
+  const meSelf=auth.user&&u.id===auth.user.id;
+  return `<div class="list-row">
+    <div class="avatar" style="width:44px;height:44px;cursor:pointer" onclick="closeSheet();openProfile('${u.id}')">${escHtml(u.avatar)}</div>
+    <span style="flex:1;min-width:0;cursor:pointer" onclick="closeSheet();openProfile('${u.id}')"><b>${escHtml(u.name)}</b>${u.church?`<br><small style="color:var(--suave)">${escHtml(u.church)}</small>`:''}</span>
+    ${trailing?`<span style="font-size:20px;margin-right:4px">${trailing}</span>`:''}
+    ${meSelf?'<span class="mine-tag">Tú</span>':`<button class="follow-btn ${u.iFollow?'on':''}" onclick="event.stopPropagation();toggleFollow('${u.id}',this)">${u.iFollow?'Siguiendo':'Seguir'}</button>`}
+  </div>`;
+}
+async function openNotifs(){
+  document.getElementById('sheet-title').textContent='Notificaciones';
+  document.getElementById('sheet-content').innerHTML='<div class="empty"><span class="big">🔔</span>Cargando...</div>';
+  openSheet();
+  try{
+    const d=await API('notifs');
+    document.getElementById('sheet-content').innerHTML = d.items.length ? d.items.map(n=>`
+      <div class="list-row" style="${n.read?'':'background:var(--crema2)'}" onclick="closeSheet();${n.kind==='dm'?`openChat('${n.fromId}','${esc(n.fromName)}')`:`openProfile('${n.fromId}')`}">
+        <div class="avatar" style="width:42px;height:42px;font-size:15px">${escHtml(n.avatar)}</div>
+        <span style="flex:1"><b>${escHtml(n.fromName)}</b> <span style="color:var(--suave);font-weight:400">${escHtml(n.text)}</span><br><small style="color:var(--suave);font-size:11px">${n.ago}</small></span>
+        ${n.read?'':'<span style="width:9px;height:9px;border-radius:50%;background:var(--miel);flex:none"></span>'}
+      </div>`).join('') : emptyMsg('🔔','No tienes notificaciones aún.','Cuando alguien te siga, reaccione o te escriba, aparecerá aquí.');
+    await API('notifs-read','POST',{scope:'nondm'}); pollBadges();
+  }catch(e){ document.getElementById('sheet-content').innerHTML=emptyMsg('😔',e.message,''); }
+}
+async function openInbox(){
+  document.getElementById('sheet-title').textContent='Mensajes';
+  document.getElementById('sheet-content').innerHTML='<div class="empty"><span class="big">✉️</span>Cargando...</div>';
+  openSheet();
+  try{
+    const d=await API('dm-list');
+    document.getElementById('sheet-content').innerHTML = d.conversations.length ? d.conversations.map(c=>`
+      <div class="list-row" onclick="openChat('${c.user.id}','${esc(c.user.name)}')">
+        <div class="avatar" style="width:44px;height:44px">${escHtml(c.user.avatar)}</div>
+        <span style="flex:1;min-width:0"><b>${escHtml(c.user.name)}</b><br><small style="color:var(--suave);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;max-width:230px">${escHtml(c.last)}</small></span>
+        ${ic(svg.chevron,'chev')}
+      </div>`).join('') : emptyMsg('✉️','No tienes mensajes aún.','Entra al perfil de alguien y toca "Mensaje" para empezar.');
+  }catch(e){ document.getElementById('sheet-content').innerHTML=emptyMsg('😔',e.message,''); }
+}
+async function openReactors(postId){
+  document.getElementById('sheet-title').textContent='Reacciones';
+  document.getElementById('sheet-content').innerHTML='<div class="empty">Cargando...</div>'; openSheet();
+  try{ const d=await API('reactors?postId='+encodeURIComponent(postId));
+    document.getElementById('sheet-content').innerHTML = d.reactors.length ? d.reactors.map(u=>userRow(u,u.emoji)).join('') : emptyMsg('👀','Nadie ha reaccionado aún.','');
+  }catch(e){ document.getElementById('sheet-content').innerHTML=emptyMsg('😔',e.message,''); }
+}
+async function openComments(postId){
+  document.getElementById('sheet-title').textContent='Comentarios';
+  document.getElementById('sheet-content').innerHTML=`
+    <div id="cmt-box" style="padding:6px 16px;min-height:150px"><div class="empty">Cargando...</div></div>
+    <div style="display:flex;gap:8px;padding:8px 16px 4px;align-items:flex-end">
+      <input id="cmt-input" placeholder="Escribe un comentario..." style="flex:1;border:1px solid var(--linea);background:var(--blanco);border-radius:22px;padding:12px 16px;font-size:14.5px;outline:none" onkeydown="if(event.key==='Enter')sendComment('${postId}')">
+      <button onclick="sendComment('${postId}')" style="width:46px;height:46px;border-radius:50%;border:none;background:linear-gradient(145deg,var(--miel),var(--caramelo));color:#fff;cursor:pointer;flex:none">➤</button>
+    </div>`;
+  openSheet(); loadComments(postId);
+}
+async function loadComments(postId){
+  try{ const d=await API('comments?postId='+encodeURIComponent(postId));
+    const box=document.getElementById('cmt-box'); if(!box) return;
+    box.innerHTML = d.comments.length ? d.comments.map(c=>`
+      <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--linea)">
+        <div class="avatar" style="width:36px;height:36px;font-size:14px;cursor:pointer" onclick="closeSheet();openProfile('${c.userId}')">${escHtml(c.avatar)}</div>
+        <div style="flex:1;min-width:0"><b style="font-size:13px;color:var(--cafe)">${escHtml(c.name)}</b> <small style="color:var(--suave);font-size:11px">${c.ago}</small><div style="font-size:14px;color:var(--texto);line-height:1.4">${escHtml(c.text)}</div></div>
+      </div>`).join('') : emptyMsg('💬','Aún no hay comentarios.','Sé el primero en escribir.');
+  }catch(e){ const box=document.getElementById('cmt-box'); if(box) box.innerHTML=emptyMsg('😔',e.message,''); }
+}
+async function sendComment(postId){
+  const inp=document.getElementById('cmt-input'); const t=(inp.value||'').trim(); if(!t) return; inp.value='';
+  try{ await API('comment','POST',{postId,text:t}); await loadComments(postId); if(tab==='inicio') loadFeed(true); }
+  catch(e){ toast(e.message); inp.value=t; }
+}
+async function openUserList(userId,kind){
+  document.getElementById('sheet-title').textContent = kind==='followers'?'Seguidores':'Siguiendo';
+  document.getElementById('sheet-content').innerHTML='<div class="empty">Cargando...</div>'; openSheet();
+  try{ const d=await API(kind+'?id='+encodeURIComponent(userId));
+    document.getElementById('sheet-content').innerHTML = d.users.length ? d.users.map(u=>userRow(u)).join('') : emptyMsg(kind==='followers'?'👥':'🤝', kind==='followers'?'Aún no tiene seguidores.':'Aún no sigue a nadie.','');
+  }catch(e){ document.getElementById('sheet-content').innerHTML=emptyMsg('😔',e.message,''); }
+}
+/* ===== VOZ EN VIVO (WebRTC) ===== */
+let localStream=null, micMuted=false, roomState=null, rtcPoll=null, inRoom=false, roomIsHost=false;
+const pcs={};
+function myId(){ return auth.user? auth.user.id : ''; }
+function amSpeaker(){ return roomState && (roomState.myRole==='host'||roomState.myRole==='speaker'); }
+function applyMicState(){ if(localStream) localStream.getAudioTracks().forEach(t=> t.enabled = amSpeaker() && !micMuted ); }
+function callStart(){ try{ if(window.AndroidApp&&AndroidApp.startCall) AndroidApp.startCall(); }catch(e){} }
+function callEnd(){ try{ if(window.AndroidApp&&AndroidApp.endCall) AndroidApp.endCall(); }catch(e){} }
+async function startVoice(id){
+  stopVoice();
+  try{ localStream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true, noiseSuppression:true, autoGainControl:true}}); }
+  catch(e){ localStream=null; toast('Entraste como oyente (sin micrófono) 🙏'); }
+  micMuted=false; applyMicState();
+  callStart();  // mantiene el audio vivo en segundo plano (APK)
+  rtcPoll=setInterval(()=>rtcTick(id), 1000); rtcTick(id);
+}
+function stopVoice(){
+  clearInterval(rtcPoll); rtcPoll=null;
+  Object.keys(pcs).forEach(k=>{ try{pcs[k].close();}catch(e){} delete pcs[k]; });
+  document.querySelectorAll('audio[data-rtc]').forEach(a=>{ try{a.srcObject=null;}catch(e){} a.remove(); });
+  if(localStream){ localStream.getTracks().forEach(t=>t.stop()); localStream=null; }
+  micMuted=false;
+}
+/* Al volver de segundo plano (minimizar app / apagar pantalla), el móvil corta el audio: reconectamos todo. */
+async function reconnectVoice(id){
+  Object.keys(pcs).forEach(k=>{ try{pcs[k].close();}catch(e){} delete pcs[k]; });
+  document.querySelectorAll('audio[data-rtc]').forEach(a=>{ try{a.srcObject=null;}catch(e){} a.remove(); });
+  if(localStream && !localStream.getAudioTracks().some(t=>t.readyState==='live')) localStream=null;
+  if(!localStream && amSpeaker()){
+    try{ localStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}}); }catch(e){ localStream=null; }
+  }
+  micMuted=false; applyMicState();
+  if(roomId===id && inRoom) rtcTick(id);
+}
+function onAppVisible(){
+  if(!inRoom || !roomId) return;
+  // Reanudar SIN reconstruir todo: así el micrófono no se corta al volver.
+  document.querySelectorAll('audio[data-rtc]').forEach(a=>a.play().catch(()=>{}));
+  applyMicState();
+  rtcTick(roomId); // solo recrea conexiones que realmente se hayan caído
+}
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible') onAppVisible(); });
+window.addEventListener('pageshow', onAppVisible);
+window.addEventListener('focus', onAppVisible);
+async function rtcTick(id){
+  if(roomId!==id || !inRoom){ stopVoice(); return; } // salió de verdad → apaga micrófono
+  applyMicState();
+  let d; try{ d=await API('rtc?room='+encodeURIComponent(id)); }catch(e){ return; }
+  if(d.ended){ inRoom=false; stopVoice(); callEnd(); hideRoomBar(); if(document.getElementById('sheet').classList.contains('open')&&document.getElementById('room-chat')){ closeSheet(); if(tab==='oracion') renderOracion(); } toast('El estudio terminó 🙏'); return; }
+  const peers=d.peers||[];
+  peers.forEach(pid=>{ if(!pcs[pid]) makePeer(id,pid, myId()<pid); });
+  for(const pid in pcs){ if(!peers.includes(pid)){ try{pcs[pid].close();}catch(e){} delete pcs[pid]; const a=document.querySelector('audio[data-rtc="'+pid+'"]'); if(a){ try{a.srcObject=null;}catch(e){} a.remove(); } } }
+  for(const s of (d.signals||[])) await handleSignal(id, s.from, s.data);
+}
+function makePeer(id, pid, initiator){
+  const pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]});
+  pcs[pid]=pc;
+  if(localStream) localStream.getTracks().forEach(t=>pc.addTrack(t, localStream));
+  else { try{ pc.addTransceiver('audio',{direction:'recvonly'}); }catch(e){} }
+  pc.onicecandidate=e=>{ if(e.candidate) sendSignal(id, pid, {candidate:e.candidate}); };
+  pc.ontrack=e=>{ playRemote(pid, e.streams[0]); };
+  pc.oniceconnectionstatechange=()=>{
+    if(pc.iceConnectionState==='failed'||pc.iceConnectionState==='disconnected'||pc.iceConnectionState==='closed'){
+      try{pc.close();}catch(err){}
+      if(pcs[pid]===pc) delete pcs[pid];
+      const a=document.querySelector('audio[data-rtc="'+pid+'"]'); if(a){ try{a.srcObject=null;}catch(err){} a.remove(); }
+    }
+  };
+  if(initiator){ pc.createOffer().then(o=>pc.setLocalDescription(o)).then(()=>sendSignal(id,pid,{sdp:pc.localDescription})).catch(()=>{}); }
+  return pc;
+}
+async function handleSignal(id, from, data){
+  let pc=pcs[from]; if(!pc) pc=makePeer(id, from, false);
+  try{
+    if(data.sdp){
+      await pc.setRemoteDescription(new RTCSessionDescription(data.sdp));
+      if(data.sdp.type==='offer'){ const ans=await pc.createAnswer(); await pc.setLocalDescription(ans); sendSignal(id, from, {sdp:pc.localDescription}); }
+    }else if(data.candidate){ try{ await pc.addIceCandidate(new RTCIceCandidate(data.candidate)); }catch(e){} }
+  }catch(e){}
+}
+function sendSignal(id, to, data){ API('rtc','POST',{room:id,to,data}).catch(()=>{}); }
+function playRemote(pid, stream){
+  let a=document.querySelector('audio[data-rtc="'+pid+'"]');
+  if(!a){ a=document.createElement('audio'); a.setAttribute('data-rtc',pid); a.autoplay=true; a.setAttribute('playsinline',''); document.body.appendChild(a); }
+  a.srcObject=stream; a.play().catch(()=>{});
+}
+/* Botón: silenciar/activar el propio micrófono (solo si tienes la palabra) */
+async function requestMic(id){
+  if(!amSpeaker()){ toast('Pide la palabra; el anfitrión te dará el turno 🙏'); return; }
+  if(!localStream){ toast('No diste permiso al micrófono. Sal y entra otra vez y acéptalo 🙏'); return; }
+  micMuted=!micMuted; applyMicState(); updateRoom();
+  toast(micMuted?'Micrófono silenciado 🔇':'Micrófono activo — habla 🎤');
+}
+/* --- Modo oscuro --- */
+function applyTheme(){ document.body.classList.toggle('dark', !!store.dark); }
+function toggleDark(){ store.dark=!store.dark; persist(); applyTheme(); if(tab==='perfil') renderPerfil(); }
+
+/* --- Sheet & toast & util --- */
+function openSheet(){ document.getElementById('sheet').classList.add('open'); }
+function closeSheet(){
+  if(inRoom){ minimizeRoom(); return; }  // en un estudio: cerrar = minimizar (sigues escuchando)
+  document.getElementById('sheet').classList.remove('open'); sheetSavedContext=null;
+}
+function minimizeRoom(){
+  document.getElementById('sheet').classList.remove('open'); sheetSavedContext=null;
+  clearInterval(roomPoll); roomPoll=null;   // rtcTick mantiene voz+presencia; UI se refresca al volver
+  showRoomBar();
+}
+async function maximizeRoom(){
+  if(!roomId||!inRoom) return;
+  hideRoomBar();
+  document.getElementById('sheet').classList.add('open');
+  try{ const r=await API('room?id='+encodeURIComponent(roomId)); roomState=r; roomIsHost=!!r.isHost; buildRoomShell(r); }catch(e){}
+  clearInterval(roomPoll); roomPoll=setInterval(()=>{ if(roomId && inRoom && document.getElementById('room-chat') && document.getElementById('sheet').classList.contains('open')) updateRoom(); }, 2500);
+}
+function showRoomBar(){
+  let bar=document.getElementById('room-bar');
+  if(!bar){ bar=document.createElement('div'); bar.id='room-bar'; bar.className='roombar'; document.getElementById('app').appendChild(bar); }
+  bar.innerHTML=`<div style="display:flex;align-items:center;gap:8px;flex:1;cursor:pointer" onclick="maximizeRoom()"><span class="live"></span><b style="font-size:13px">Estudio en vivo</b><span style="color:var(--vainilla);font-size:12px">· escuchando</span></div>
+    <button onclick="maximizeRoom()" style="background:rgba(255,255,255,.16);border:none;color:#FBEFDD;font-weight:700;font-size:12px;padding:7px 12px;border-radius:16px;cursor:pointer">Volver</button>
+    <button onclick="leaveRoom(roomId,roomIsHost)" style="background:#B24A3A;border:none;color:#fff;font-weight:700;font-size:12px;padding:7px 12px;border-radius:16px;cursor:pointer">Salir</button>`;
+  bar.style.display='flex';
+}
+function hideRoomBar(){ const bar=document.getElementById('room-bar'); if(bar) bar.style.display='none'; }
+let toastT; function toast(m){ const e=document.getElementById('toast'); e.textContent=m; e.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>e.classList.remove('show'),2200); }
+function esc(s){ return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ============ INIT ============ */
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js').catch(()=>{}); }
+(async function boot(){
+  applyTheme();
+  if(location.protocol==='file:'){
+    document.getElementById('nav').style.display='none';
+    document.getElementById('fab').style.display='none';
+    screen.innerHTML=`<div style="padding:60px 30px;text-align:center">
+      <div style="font-size:48px">🕊️</div>
+      <h2 style="font-family:Georgia,serif;color:var(--cafe);margin:14px 0 10px">Abre la app con el servidor</h2>
+      <p style="color:var(--suave);font-size:14.5px;line-height:1.6">Para que la comunidad funcione (cuentas, publicaciones, mensajes) hay que abrirla con el servidor, no con doble clic al archivo.</p>
+      <p style="color:var(--caramelo);font-size:14.5px;line-height:1.6;margin-top:14px"><b>Haz doble clic en<br>INICIAR_APOSENTO_ALTO.bat</b><br>y la app se abrirá sola. 🙏</p>
+    </div>`;
+    return;
+  }
+  if(auth.token){
+    try{ const d=await API('me'); auth.user=d.user; enterApp(); return; }catch(e){ setToken(''); }
+  }
+  showAuth();
+})();
+</script>
+</body>
+</html>
