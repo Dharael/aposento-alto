@@ -33,10 +33,10 @@ if (process.env.DATABASE_URL) {
 async function loadState() {
   if (pgPool) {
     try {
-      await pgPool.query('CREATE TABLE IF NOT EXISTS app_state (id INT PRIMARY KEY, data JSONB)');
-      const r = await pgPool.query('SELECT data FROM app_state WHERE id = 1');
+      await pgPool.query('CREATE TABLE IF NOT EXISTS aposentoalto_state (id INT PRIMARY KEY, data JSONB)');
+      const r = await pgPool.query('SELECT data FROM aposentoalto_state WHERE id = 1');
       if (r.rows.length) db = Object.assign(db, r.rows[0].data);
-      else await pgPool.query('INSERT INTO app_state (id, data) VALUES (1, $1)', [JSON.stringify(db)]);
+      else await pgPool.query('INSERT INTO aposentoalto_state (id, data) VALUES (1, $1)', [JSON.stringify(db)]);
       console.log('Conectado a PostgreSQL — datos permanentes ✅');
       return;
     } catch (e) { console.error('No se pudo conectar a PostgreSQL, usando data.json local:', e.message); }
@@ -48,7 +48,7 @@ function save() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => {
     if (pgPool) {
-      try { await pgPool.query('UPDATE app_state SET data = $1 WHERE id = 1', [JSON.stringify(db)]); return; }
+      try { await pgPool.query('UPDATE aposentoalto_state SET data = $1 WHERE id = 1', [JSON.stringify(db)]); return; }
       catch (e) { console.error('Error guardando en PostgreSQL:', e.message); }
     }
     try { fs.writeFileSync(DATA_FILE, JSON.stringify(db)); } catch (e) { console.error('No se pudo guardar', e); }
