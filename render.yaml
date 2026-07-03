@@ -1,10 +1,18 @@
+databases:
+  - name: aposento-alto-db
+    plan: free
+
 services:
   - type: web
     name: aposento-alto
     env: node
     plan: free
-    buildCommand: ""
+    buildCommand: npm install
     startCommand: node server.js
     envVars:
       - key: NODE_VERSION
         value: 20.0.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: aposento-alto-db
+          property: connectionString

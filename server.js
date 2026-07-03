@@ -16,11 +16,44 @@ const ROOT = __dirname;
 const DATA_FILE = path.join(ROOT, 'data.json');
 
 /* ---------- Almacenamiento ---------- */
+// Si hay DATABASE_URL (Render/Postgres) los datos son permanentes de verdad.
+// Si no (uso local con doble clic), se guardan en data.json como antes.
 let db = { users: [], posts: [], follows: [], dms: [], rooms: [], sessions: {}, notifs: [] };
-try { if (fs.existsSync(DATA_FILE)) db = Object.assign(db, JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'))); } catch (e) { console.error('data.json corrupto, empezando limpio'); }
 let rtcSignals = []; // señalización WebRTC (en memoria, no se guarda a disco)
 let saveTimer = null;
-function save() { clearTimeout(saveTimer); saveTimer = setTimeout(() => { try { fs.writeFileSync(DATA_FILE, JSON.stringify(db)); } catch (e) { console.error('No se pudo guardar', e); } }, 200); }
+let pgPool = null;
+
+if (process.env.DATABASE_URL) {
+  try {
+    const { Pool } = require('pg');
+    pgPool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+  } catch (e) { console.error('No se pudo cargar el módulo pg, usando data.json local:', e.message); }
+}
+
+async function loadState() {
+  if (pgPool) {
+    try {
+      await pgPool.query('CREATE TABLE IF NOT EXISTS app_state (id INT PRIMARY KEY, data JSONB)');
+      const r = await pgPool.query('SELECT data FROM app_state WHERE id = 1');
+      if (r.rows.length) db = Object.assign(db, r.rows[0].data);
+      else await pgPool.query('INSERT INTO app_state (id, data) VALUES (1, $1)', [JSON.stringify(db)]);
+      console.log('Conectado a PostgreSQL — datos permanentes ✅');
+      return;
+    } catch (e) { console.error('No se pudo conectar a PostgreSQL, usando data.json local:', e.message); }
+  }
+  try { if (fs.existsSync(DATA_FILE)) db = Object.assign(db, JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'))); } catch (e) { console.error('data.json corrupto, empezando limpio'); }
+}
+
+function save() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    if (pgPool) {
+      try { await pgPool.query('UPDATE app_state SET data = $1 WHERE id = 1', [JSON.stringify(db)]); return; }
+      catch (e) { console.error('Error guardando en PostgreSQL:', e.message); }
+    }
+    try { fs.writeFileSync(DATA_FILE, JSON.stringify(db)); } catch (e) { console.error('No se pudo guardar', e); }
+  }, 200);
+}
 
 /* ---------- Utilidades ---------- */
 const uid = () => crypto.randomBytes(9).toString('hex');
@@ -377,17 +410,20 @@ function serveStatic(req, res, urlPath) {
 }
 
 /* ---------- Servidor ---------- */
-http.createServer(async (req, res) => {
-  const u = new URL(req.url, 'http://x');
-  const urlPath = u.pathname;
-  const query = Object.fromEntries(u.searchParams);
-  try {
-    if (urlPath.startsWith('/api/')) return await handleApi(req, res, urlPath, query);
-    serveStatic(req, res, urlPath);
-  } catch (e) { console.error(e); send(res, 500, { error: 'Error del servidor' }); }
-}).listen(PORT, () => {
-  console.log('====================================================');
-  console.log('  APOSENTO ALTO en vivo  ·  http://localhost:' + PORT);
-  console.log('  Comunidad lista. Abre ese link en tu navegador.');
-  console.log('====================================================');
-});
+(async () => {
+  await loadState();
+  http.createServer(async (req, res) => {
+    const u = new URL(req.url, 'http://x');
+    const urlPath = u.pathname;
+    const query = Object.fromEntries(u.searchParams);
+    try {
+      if (urlPath.startsWith('/api/')) return await handleApi(req, res, urlPath, query);
+      serveStatic(req, res, urlPath);
+    } catch (e) { console.error(e); send(res, 500, { error: 'Error del servidor' }); }
+  }).listen(PORT, () => {
+    console.log('====================================================');
+    console.log('  APOSENTO ALTO en vivo  ·  http://localhost:' + PORT);
+    console.log('  Comunidad lista. Abre ese link en tu navegador.');
+    console.log('====================================================');
+  });
+})();
